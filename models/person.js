@@ -1,12 +1,12 @@
 export default(sequelize, DataType) => {
-  const Person = sequelize.define('person', {
+  const Person = sequelize.define('persons', {
     id: {
       type: DataType.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
     name: {
-      type: DataType.INTEGER,
+      type: DataType.STRING,
       allowNull: false
     },
     age: {
@@ -25,10 +25,7 @@ export default(sequelize, DataType) => {
     },
     lonlat:{
       type: DataType.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: false
-      },
+      allowNull: true
     },
   });
 

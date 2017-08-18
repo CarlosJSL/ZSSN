@@ -1,5 +1,5 @@
 export default(sequelize, DataType) => {
-  const Item = sequelize.define('item', {
+  const Item = sequelize.define('items', {
     id: {
       type: DataType.INTEGER,
       primaryKey: true,

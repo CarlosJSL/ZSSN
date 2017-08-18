@@ -16,13 +16,19 @@ class PersonController {
 
   getAll() {
     return this.Person.findAll({})
-                .then(result => defaultResponse(result))
+                .then(result => defaultResponse(result, HttpStatus.OK))
                 .catch(error => errorResponse(error.message));
   }
 
-  getById(params) {
-    return this.Person.findOne({ where: params })
-                .then(result => defaultResponse(result))
+  getById(id) {
+    return this.Person.findOne({ where: id })
+                .then(result => {
+                    if (result != null){
+                      return defaultResponse(result)
+                    }else{
+                      return defaultResponse("Error 404: Not Found", HttpStatus.NOT_FOUND)
+                    }
+                  })
                 .catch(error => errorResponse(error.message));
   }
 

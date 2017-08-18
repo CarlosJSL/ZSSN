@@ -33,7 +33,7 @@ export default (app) => {
     };
 
     database.models = loadModels(sequelize);
-
+    console.log(database.models)
     sequelize.sync().done(() => database);
   }
   return database;
