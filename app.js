@@ -10,5 +10,5 @@ app.datasource = datasource(app);
 
 app.set('port', 7000);
 app.use(bodyParser.json());
-console.log(app)
+
 export default app;

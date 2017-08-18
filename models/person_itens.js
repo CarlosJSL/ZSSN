@@ -13,6 +13,13 @@ export default(sequelize, DataType) => {
       type: DataType.INTEGER,
       allowNull: false
     },
+    quantity: {
+      type: DataType.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
 
   return PersonItens;

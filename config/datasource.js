@@ -13,6 +13,7 @@ const loadModels = (sequelize) => {
     const model = sequelize.import(modelDir);
     models[model.name] = model;
   });
+
   return models;
 };
 
@@ -30,6 +31,8 @@ export default (app) => {
       Sequelize,
       models: {},
     };
+
+    database.models = loadModels(sequelize);
 
     sequelize.sync().done(() => database);
   }
