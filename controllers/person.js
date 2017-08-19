@@ -48,45 +48,47 @@ class PersonController {
     const itemController = new ItemController(app.datasource.models.items);
     const personItemController = new PersonItemController(app.datasource.models.person_itens)
 
-      return this.Person.findOne({where: {name: req.body.name} })
-                .then(result =>  {
-                    let Errors = this.validation(result, req.body)
+    return this.Person.findOne({where: {name: req.body.name} })
+              .then(result =>  {
+                  let Errors = this.validation(result, req.body)
 
-                    if(Object.keys(Errors).length === 0){
+                  if(Object.keys(Errors).length === 0){
 
-                      Promise.all([this.Person.create(req.body),itemController.getName(req.body.items)])
-                              .then(registered => {
+                    Promise.all([this.Person.create(req.body),itemController.getName(req.body.items)])
+                            .then(registered => {
 
-                                res.status(HttpStatus.CREATED).send(registered)
-                                personItemController.create(registered[0].dataValues.id, registered[1],req.body)
-                              })
-                             
-                    }else{
-                      res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
+                              res.status(HttpStatus.CREATED).send(registered)
+                              personItemController.create(registered[0].dataValues.id, registered[1],req.body)
+                            })
+                           
+                  }else{
+                    res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
+                  }
+              })
+              .error(error => error.message)
+  }
+  
+
+  update(req, res) {
+    let Errors = this.validation(req.body)
+
+    if(Object.keys(Errors).length === 0){
+         return this.Person.update(req.body, { where: { id: req.params.id  } })
+                .then(result => {
+                    if(result == 0){
+                      Errors["name"] = "Not Found"
+                      return res.status(HttpStatus.NOT_FOUND).send(Errors)
                     }
+
+                    return res.status(200).send("Updated person")  
                 })
-                .error(error => error.message)
+                .catch(error => error.message);                    
+      }else{
+        res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
+      }
+
   }
   
-
-  update(data, id) {
-    return this.Person.update(data, { where: id })
-                .then(result => defaultResponse(result))
-                .catch(error => errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY));
-  }
-
-  registerItem(itemController, data){
-
-      itemController.validation(data.items)
-      // return itemController.create(req.body)
-      //                             .then(result => {
-      //                                itemController.create()
-      //                             })
-      //                             .catch(error => res.status(500).send("Internal Server Error"));
-  }
-
-  
-
   validation(nameOfUser,data){
       let Errors = {};
 
@@ -101,7 +103,19 @@ class PersonController {
       if(nameOfUser != null) {
          Errors["name"] = "already exists"
        }
-      
+      return Errors;
+  }
+
+  validation(data){
+      let Errors = {};
+
+      if (isNaN(data.age)){
+        Errors["age"] = "is not a number"
+      }
+
+      if(data.gender.length > 1 && (data.gender != "F" || data.gender != "M" ) ){
+        Errors["gender"] = "is not a gender"
+      }
 
       return Errors;
   }
