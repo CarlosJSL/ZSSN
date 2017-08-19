@@ -12,7 +12,7 @@ export default(sequelize, DataType) => {
         notEmpty: true,
       },
     },
-    point: {
+    points: {
       type: DataType.INTEGER,
       allowNull: false,
       validate: {

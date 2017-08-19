@@ -33,7 +33,11 @@ export default (app) => {
     };
 
     database.models = loadModels(sequelize);
-    console.log(database.models)
+    
+    database.models.persons.hasMany(database.models.person_itens)
+    database.models.items.hasMany(database.models.person_itens)
+    database.models.person_itens.belongsTo(database.models.persons)
+    
     sequelize.sync().done(() => database);
   }
   return database;

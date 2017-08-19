@@ -1,40 +1,18 @@
 import PersonController from '../controllers/person';
+import app from '../app'
 
 export default (app) => {
   
   const personController = new PersonController(app.datasource.models.persons);
   app.route('/api/person.json')
+      .get((req, res) => personController.getAll(req,res))
+      .post((req, res) => personController.create(req,res,app));
 
-      .get((req, res) => {
-        personController.getAll()
-          .then(response => {
-            res.status(response.statusCode);
-            res.json(response.data);
-          });
-      })
-      .post((req, res) => {
-        personController.create(req.body)
-          .then(response => {
-            res.status(response.statusCode);
-            res.json(response.data);
-          });
-      });
+  app.route('/api/:id/person.json')
+      .get((req, res) => personController.getPersonWithItens(req,res))
 
   app.route('/api/person/:id')
-
-      .get((req, res) => {
-        personController.getById(req.params)
-          .then(response => {
-            res.status(response.statusCode);
-            res.json(response.data);
-          });
-      })
-      .put((req, res) => {
-        personController.update(req.body, req.params)
-          .then(response => {
-            res.status(response.statusCode);
-            res.json(response.data);
-          });
-      })
+      .get((req, res) => personController.getById(req,res))
+      .patch((req, res) => personController.update(req,res))
   
 };
