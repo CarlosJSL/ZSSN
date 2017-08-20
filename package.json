@@ -6,7 +6,7 @@
   "scripts": {
     "start": "babel-node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test-unit": "NODE_ENV=test mocha --opts test/unit/mocha.opts test/unit/**/*.js",
+    "test-unit": "NODE_ENV=test mocha --opts test/unit/mocha.opts test/unit/**/*.js"
   },
   "repository": {
     "type": "git",

@@ -17,7 +17,7 @@ class PersonController {
   }
 
   getAll(req,res) {
-    return this.Person.findAll()
+    return this.Person.findAll({})
                 .then(persons => res.status(HttpStatus.OK).send(persons))
                 .catch(error => res.status(500).send(error.message)) 
   }
