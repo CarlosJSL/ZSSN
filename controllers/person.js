@@ -26,7 +26,8 @@ class PersonController {
     const dir = path.join(__dirname, '../models/person_itens');
     this.PersonItem = this.sequelize.import(dir)
 
-    return this.Person.findAll({where:{id:req.params.id},include:[ { model: this.PersonItem}] })
+    return this.Person.findAll({where:{id:req.params.id},
+                               include:[ { model: this.PersonItem}] })
                 .then(result => res.status(HttpStatus.OK).send(result))
                 .catch(error => res.send(error.message)); 
   }
@@ -70,7 +71,7 @@ class PersonController {
   
 
   update(req, res) {
-    let Errors = this.validation(req.body)
+    let Errors = this.validationUpdate(req.body)
 
     if(Object.keys(Errors).length === 0){
          return this.Person.update(req.body, { where: { id: req.params.id  } })
@@ -86,7 +87,6 @@ class PersonController {
       }else{
         res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
       }
-
   }
   
   validation(nameOfUser,data){
@@ -106,7 +106,7 @@ class PersonController {
       return Errors;
   }
 
-  validation(data){
+  validationUpdate(data){
       let Errors = {};
 
       if (isNaN(data.age)){
@@ -118,6 +118,32 @@ class PersonController {
       }
 
       return Errors;
+  }
+
+  reportInfection(req,res){
+    let reg = {registrations:1}
+      return Promise.all([this.Person.findById(req.params.id),
+                          this.Person.findById(req.body.infected)])
+                    .then(persons => {
+                          if(this.existPerson(persons)){
+                            persons[0].dataValues.registrations++
+
+                            if(persons[0].dataValues.registrations > 2 ) persons[0].dataValues.infected = true
+
+                            this.Person.update(persons[0].dataValues,{ where: { id: req.params.id  } })
+                                        .then(result => res.status(200).send("Report succeed!"))
+                                        .error(error => erro.message)
+                          }else{
+                            res.status(HttpStatus.NOT_FOUND).send("Error 404: Person not Found")
+                          }
+                    })
+  }
+
+  existPerson(persons){
+    if(persons[0] != null && persons[1] != null)  {
+      return true
+    }
+    return false
   }
 }
 

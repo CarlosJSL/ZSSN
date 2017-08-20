@@ -15,4 +15,6 @@ export default (app) => {
       .get((req, res) => personController.getById(req,res))
       .patch((req, res) => personController.update(req,res))
   
+  app.route('/api/person/:id/report')
+      .post((req, res) => personController.reportInfection(req,res)); 
 };

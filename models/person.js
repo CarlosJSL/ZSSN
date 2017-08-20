@@ -27,6 +27,16 @@ export default(sequelize, DataType) => {
       type: DataType.STRING,
       allowNull: true
     },
+    infected:{
+      type: DataType.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
+    registrations:{
+      type: DataType.INTEGER,
+      allowNull: false,
+      defaultValue: 0
+    },
   });
 
   return Person;
