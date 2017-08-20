@@ -37,6 +37,7 @@ export default (app) => {
     database.models.persons.hasMany(database.models.person_itens)
     database.models.items.hasMany(database.models.person_itens)
     database.models.person_itens.belongsTo(database.models.persons)
+    database.models.person_itens.belongsTo(database.models.items)
     
     sequelize.sync().done(() => database);
   }

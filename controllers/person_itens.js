@@ -1,9 +1,18 @@
 import HttpStatus from 'http-status';
+import path from 'path';
+import config from '../config/config';
+import Sequelize from 'sequelize';
 
 class PersonItemController {
   constructor(PersonItem) {
     this.PersonItem = PersonItem;
-    this.PersonItemWillBeRegistered = () => {}
+    this.PersonItemWillBeRegistered = () => {};
+    this.sequelize = new Sequelize(
+            config.database,
+            config.username,
+            config.pasword,
+            config.params,
+            );
   }
 
   create(idOfPerson,Items,person) {
@@ -16,6 +25,16 @@ class PersonItemController {
       return this.PersonItem.sum(field)
                   .then(result => result )
                   .error(error => error.message); 
+  }
+
+  getPersonWithItens(req,res){
+    const dir = path.join(__dirname, '../models/itens');
+    this.Item = this.sequelize.import(dir)
+
+    return this.PersonItem.findAll({where:{person_id:req.params.id},
+                                    include:[ { model: this.Item}] })
+                .then(result => res.status(HttpStatus.OK).send(result))
+                .catch(error => res.send(error.message)); 
   }
 
   ConstructTheDataObjectForTable(idOfPerson,Items,person){
