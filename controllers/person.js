@@ -12,11 +12,11 @@ class PersonController {
             config.database,
             config.username,
             config.password,
-            config.params,
+            config.params
             ); 
   }
 
-  getAll(req,res) {
+  getAll(res) {
     return this.Person.findAll({})
                 .then(persons => res.status(HttpStatus.OK).send(persons))
                 .catch(error => res.status(500).send(error.message)) 
@@ -25,19 +25,20 @@ class PersonController {
   getPersonWithItens(req,res){
     const dir = path.join(__dirname, '../models/itens');
     this.Item = this.sequelize.import(dir)
-
+    console.log(this.Item)
     return this.Person.findAll({where:{id:req.params.id},include:[ { model: this.Item}] })
                 .then(persons => res.status(HttpStatus.OK).send(persons))
                 .catch(error => res.status(500).send(error.message))  
   }
 
   getById(req,res) {
-    return this.Person.findOne({ where: req.body.id })
+    
+    return this.Person.findOne({ where: {id:req.params.id }})
                 .then(person => {
                   if (person == null){
-                    res.status(HttpStatus.NOT_FOUND).send("Error 404: Not Found")
+                    return res.status(HttpStatus.NOT_FOUND).send("Error 404: Not Found")
                   }
-                    res.status(HttpStatus.OK).send(person)
+                    return res.status(HttpStatus.OK).send(person)
                 })
                 .catch(error => res.status(500).send(error.message)) 
   }
@@ -55,11 +56,11 @@ class PersonController {
                     Promise.all([this.Person.create(req.body),itemController.getName(req.body.items)])
                             .then(registered => {
                               personItemController.create(registered[0].dataValues.id, registered[1],req.body)
-                              res.status(HttpStatus.CREATED).send(registered)
+                              return res.status(HttpStatus.CREATED).send(registered)
                             })
                             .catch(error => error.message)
                   }else{
-                    res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
+                   return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
                   }
               })
               .catch(error => res.status(500).send(error.message)) 

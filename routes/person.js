@@ -5,7 +5,7 @@ export default (app) => {
   
   const personController = new PersonController(app.datasource.models.persons);
   app.route('/api/person.json')
-      .get((req, res) => personController.getAll(req,res))
+      .get((req, res) => personController.getAll(res))
       .post((req, res) => personController.create(req,res,app));
 
   app.route('/api/:id/person.json')
