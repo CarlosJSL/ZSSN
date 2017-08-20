@@ -14,6 +14,7 @@ class PersonController {
             config.pasword,
             config.params,
             );
+    this.report = {}
   }
 
   getAll(req,res) {
@@ -170,17 +171,26 @@ class PersonController {
                   .catch(error => error.message)
   }
 
-
   pointsLosted(req,res,app){
-      const dir = path.join(__dirname, '../models/itens');
-      this.Item = this.sequelize.import(dir)
+    const dir = path.join(__dirname, '../models/itens');
+    this.Item = this.sequelize.import(dir)
 
-      return this.Person.findAll({where:{infected:true},
-                               include:[ { model: this.Item}] })
-                .then(persons => {
-                  res.status(HttpStatus.OK).send(persons)
-                })
-                .catch(error => res.send(error.message)); 
+    return this.Person.findAll({where:{infected:true},
+                             include:[ { model: this.Item}] })
+              .then(persons => {
+                let sum = 0;
+                for(let j = 0; j < persons.length ; j++ ){
+                    for(let i = 0; i < persons[j].dataValues.items.length ; i++ ){
+                        sum = persons[j].dataValues.items[i].dataValues.points + sum
+                    }  
+                }
+                
+                this.report['description'] = 'Total points lost in items that belong to infected people';
+                this.report['total points'] = sum;
+
+                res.status(HttpStatus.OK).send(this.report)
+              })
+              .catch(error => res.send(error.message)); 
   }
 
   existPerson(persons){
