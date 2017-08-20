@@ -34,11 +34,16 @@ export default (app) => {
 
     database.models = loadModels(sequelize);
     
-    database.models.persons.hasMany(database.models.person_itens)
-    database.models.items.hasMany(database.models.person_itens)
-    database.models.person_itens.belongsTo(database.models.persons)
-    database.models.person_itens.belongsTo(database.models.items)
+    //database.models.persons.hasMany(database.models.person_itens)
+    //database.models.items.hasMany(database.models.person_itens)
+
+    database.models.persons.belongsToMany(database.models.items, { through: database.models.person_itens })
+    database.models.items.belongsToMany(database.models.persons, { through: database.models.person_itens })
     
+    //database.models.person_itens.belongsTo(database.models.persons)
+    //database.models.person_itens.belongsTo(database.models.items)
+    
+
     sequelize.sync().done(() => database);
   }
   return database;

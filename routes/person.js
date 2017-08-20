@@ -8,6 +8,9 @@ export default (app) => {
       .get((req, res) => personController.getAll(req,res))
       .post((req, res) => personController.create(req,res,app));
 
+  app.route('/api/:id/person.json')
+      .get((req, res) => personController.getPersonWithItens(req,res))
+
   app.route('/api/person/:id')
       .get((req, res) => personController.getById(req,res))
       .patch((req, res) => personController.update(req,res))

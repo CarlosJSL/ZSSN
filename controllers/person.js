@@ -23,11 +23,11 @@ class PersonController {
   }
 
   getPersonWithItens(req,res){
-    const dir = path.join(__dirname, '../models/person_itens');
-    this.PersonItem = this.sequelize.import(dir)
+    const dir = path.join(__dirname, '../models/itens');
+    this.Item = this.sequelize.import(dir)
 
     return this.Person.findAll({where:{id:req.params.id},
-                               include:[ { model: this.PersonItem}] })
+                               include:[ { model: this.Item}] })
                 .then(result => res.status(HttpStatus.OK).send(result))
                 .catch(error => res.send(error.message)); 
   }
@@ -172,13 +172,13 @@ class PersonController {
 
 
   pointsLosted(req,res,app){
-      const dir = path.join(__dirname, '../models/person_itens');
-      this.PersonItem = this.sequelize.import(dir)
+      const dir = path.join(__dirname, '../models/itens');
+      this.Item = this.sequelize.import(dir)
 
       return this.Person.findAll({where:{infected:true},
-                               include:[ { model: this.PersonItem}] })
+                               include:[ { model: this.Item}] })
                 .then(persons => {
-                  res.status(HttpStatus.OK).send(result)
+                  res.status(HttpStatus.OK).send(persons)
                 })
                 .catch(error => res.send(error.message)); 
   }

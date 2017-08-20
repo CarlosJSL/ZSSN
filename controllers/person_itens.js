@@ -27,16 +27,6 @@ class PersonItemController {
                   .error(error => error.message); 
   }
 
-  getPersonWithItens(req,res){
-    const dir = path.join(__dirname, '../models/itens');
-    this.Item = this.sequelize.import(dir)
-
-    return this.PersonItem.findAll({where:{person_id:req.params.id},
-                                    include:[ { model: this.Item}] })
-                .then(result => res.status(HttpStatus.OK).send(result))
-                .catch(error => res.send(error.message)); 
-  }
-
   ConstructTheDataObjectForTable(idOfPerson,Items,person){
      let registerPersonItem = [];
 
