@@ -66,7 +66,7 @@ class PersonController {
                     res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
                   }
               })
-              .error(error => error.message)
+              .catch(error => error.message)
   }
   
 
@@ -81,7 +81,7 @@ class PersonController {
                       return res.status(HttpStatus.NOT_FOUND).send(Errors)
                     }
 
-                    return res.status(200).send("Updated person")  
+                    return res.status(HttpStatus.OK).send("Updated person")  
                 })
                 .catch(error => error.message);                    
       }else{
@@ -121,7 +121,7 @@ class PersonController {
   }
 
   reportInfection(req,res){
-    let reg = {registrations:1}
+    
       return Promise.all([this.Person.findById(req.params.id),
                           this.Person.findById(req.body.infected)])
                     .then(persons => {
@@ -131,7 +131,7 @@ class PersonController {
                             if(persons[0].dataValues.registrations > 2 ) persons[0].dataValues.infected = true
 
                             this.Person.update(persons[0].dataValues,{ where: { id: req.params.id  } })
-                                        .then(result => res.status(200).send("Report succeed!"))
+                                        .then(result => res.status(HttpStatus.OK).send("Report succeed!"))
                                         .error(error => erro.message)
                           }else{
                             res.status(HttpStatus.NOT_FOUND).send("Error 404: Person not Found")
@@ -139,11 +139,36 @@ class PersonController {
                     })
   }
 
+  reportInfectedPeople(req,res){
+      return Promise.all([this.Person.count(),
+                          this.Person.count({where:{infected:true}})])
+                    .then(statistics => {   
+                      res.status(HttpStatus.OK).send(this.average(statistics));
+                    })
+                    .catch(error => error.message)
+  }
+
+  reportHealthyPeople(req,res){
+      return Promise.all([this.Person.count(),
+                          this.Person.count({where:{infected:false}})])
+                    .then(statistics => {   
+                        res.status(HttpStatus.OK).send(this.average(statistics));
+                    })
+                    .catch(error => error.message)
+  }
+
   existPerson(persons){
     if(persons[0] != null && persons[1] != null)  {
       return true
     }
     return false
+  }
+
+  average(statistics){
+     let average = {}
+     average['average'] = statistics[1]/statistics[0];
+
+     return average
   }
 }
 

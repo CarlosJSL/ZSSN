@@ -15,6 +15,12 @@ export default (app) => {
       .get((req, res) => personController.getById(req,res))
       .patch((req, res) => personController.update(req,res))
   
-  app.route('/api/person/:id/report')
+  app.route('/api/person/:id/report.json')
       .post((req, res) => personController.reportInfection(req,res)); 
+
+  app.route('/api/report/people/infected.json')
+      .get((req, res) => personController.reportInfectedPeople(req,res));
+
+  app.route('/api/report/people/healthy_people.json')
+      .get((req, res) => personController.reportHealthyPeople(req,res));    
 };
