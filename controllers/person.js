@@ -58,7 +58,6 @@ class PersonController {
                               res.status(HttpStatus.CREATED).send(registered)
                             })
                             .catch(error => error.message)
-                           
                   }else{
                     res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
                   }
