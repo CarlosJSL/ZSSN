@@ -22,5 +22,10 @@ export default (app) => {
       .get((req, res) => personController.reportInfectedPeople(req,res));
 
   app.route('/api/report/people/healthy_people.json')
-      .get((req, res) => personController.reportHealthyPeople(req,res));    
+      .get((req, res) => personController.reportHealthyPeople(req,res));
+
+   app.route('/api/report/average_people_inventory.json')
+      .get((req, res) => personController.reportAveragePeopleInventory(req,res,app));
+
+       
 };

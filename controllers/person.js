@@ -122,21 +122,21 @@ class PersonController {
 
   reportInfection(req,res){
     
-      return Promise.all([this.Person.findById(req.params.id),
-                          this.Person.findById(req.body.infected)])
-                    .then(persons => {
-                          if(this.existPerson(persons)){
-                            persons[0].dataValues.registrations++
+    return Promise.all([this.Person.findById(req.params.id),
+                        this.Person.findById(req.body.infected)])
+                  .then(persons => {
+                        if(this.existPerson(persons)){
+                          persons[0].dataValues.registrations++
 
-                            if(persons[0].dataValues.registrations > 2 ) persons[0].dataValues.infected = true
+                          if(persons[0].dataValues.registrations > 2 ) persons[0].dataValues.infected = true
 
-                            this.Person.update(persons[0].dataValues,{ where: { id: req.params.id  } })
-                                        .then(result => res.status(HttpStatus.OK).send("Report succeed!"))
-                                        .error(error => erro.message)
-                          }else{
-                            res.status(HttpStatus.NOT_FOUND).send("Error 404: Person not Found")
-                          }
-                    })
+                          this.Person.update(persons[0].dataValues,{ where: { id: req.params.id  } })
+                                      .then(result => res.status(HttpStatus.OK).send("Report succeed!"))
+                                      .error(error => erro.message)
+                        }else{
+                          res.status(HttpStatus.NOT_FOUND).send("Error 404: Person not Found")
+                        }
+                  })
   }
 
   reportInfectedPeople(req,res){
@@ -157,18 +157,39 @@ class PersonController {
                     .catch(error => error.message)
   }
 
+  reportAveragePeopleInventory(req,res,app){
+    const personItemController = new PersonItemController(app.datasource.models.person_itens)
+
+    return Promise.all([personItemController.sum('quantity'),
+                        this.Person.count({where:{infected:false}}),
+                        this.Person.count({where:{infected:true}})])
+                  .then(statistics => {   
+                       
+                       res.status(HttpStatus.OK).send(this.averageAll(statistics))
+                  })
+                  .catch(error => error.message)
+  }
+
   existPerson(persons){
     if(persons[0] != null && persons[1] != null)  {
-      return true
+      return true;
     }
-    return false
+    return false;
   }
 
   average(statistics){
-     let average = {}
+     let average = {};
      average['average'] = statistics[1]/statistics[0];
 
      return average
+  }
+
+  averageAll(statistics){
+    let averageAll = {};
+    averageAll['average items quantity of person'] = statistics[0] / statistics[2];
+    averageAll['average items quantity of healthy person'] = statistics[0] / statistics[1];
+
+    return averageAll;
   }
 }
 

@@ -12,6 +12,11 @@ class PersonItemController {
                   .then(result => result )
                   .error(error => error.message);
   }
+  sum(field){
+      return this.PersonItem.sum(field)
+                  .then(result => result )
+                  .error(error => error.message); 
+  }
 
   ConstructTheDataObjectForTable(idOfPerson,Items,person){
      let registerPersonItem = [];
