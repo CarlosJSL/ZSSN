@@ -10,7 +10,7 @@ class PersonItemController {
     this.sequelize = new Sequelize(
             config.database,
             config.username,
-            config.pasword,
+            config.password,
             config.params,
             );
   }
@@ -19,12 +19,12 @@ class PersonItemController {
    
        return this.PersonItem.bulkCreate(this.ConstructTheDataObjectForTable(idOfPerson,Items,person))
                   .then(result => result )
-                  .error(error => error.message);
+                  .catch(error => res.status(500).send(error.message));
   }
   sum(field){
       return this.PersonItem.sum(field)
                   .then(result => result )
-                  .error(error => error.message); 
+                  .catch(error => res.status(500).send(error.message))  
   }
 
   ConstructTheDataObjectForTable(idOfPerson,Items,person){

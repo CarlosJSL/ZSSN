@@ -23,7 +23,7 @@ export default (app) => {
     const sequelize = new Sequelize(
             config.database,
             config.username,
-            config.pasword,
+            config.password,
             config.params,
             );
     database = {

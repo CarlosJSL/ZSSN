@@ -28,6 +28,6 @@ export default (app) => {
       .get((req, res) => personController.reportAveragePeopleInventory(req,res,app));
 
   app.route('/api/report/infected_points.json')
-      .get((req, res) => personController.pointsLosted(req,res,app));
+      .get((req, res) => personController.reportPointsLosted(req,res,app));
 
 };

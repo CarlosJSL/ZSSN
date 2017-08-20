@@ -11,39 +11,35 @@ class PersonController {
     this.sequelize = new Sequelize(
             config.database,
             config.username,
-            config.pasword,
+            config.password,
             config.params,
-            );
-    this.report = {}
+            ); 
   }
 
   getAll(req,res) {
     return this.Person.findAll()
-                .then(result => res.status(HttpStatus.OK).send(result))
-                .catch(error => res.send(error.message));
+                .then(persons => res.status(HttpStatus.OK).send(persons))
+                .catch(error => res.status(500).send(error.message)) 
   }
 
   getPersonWithItens(req,res){
     const dir = path.join(__dirname, '../models/itens');
     this.Item = this.sequelize.import(dir)
 
-    return this.Person.findAll({where:{id:req.params.id},
-                               include:[ { model: this.Item}] })
-                .then(result => res.status(HttpStatus.OK).send(result))
-                .catch(error => res.send(error.message)); 
+    return this.Person.findAll({where:{id:req.params.id},include:[ { model: this.Item}] })
+                .then(persons => res.status(HttpStatus.OK).send(persons))
+                .catch(error => res.status(500).send(error.message))  
   }
 
   getById(req,res) {
-
     return this.Person.findOne({ where: req.body.id })
-                .then(result => {
-                  
-                    if (result == null){
-                      res.status(HttpStatus.NOT_FOUND).send("Error 404: Not Found")
-                    }
-                      res.status(HttpStatus.OK).send(result)
-                  })
-                .catch(error => res.send(error.message));
+                .then(person => {
+                  if (person == null){
+                    res.status(HttpStatus.NOT_FOUND).send("Error 404: Not Found")
+                  }
+                    res.status(HttpStatus.OK).send(person)
+                })
+                .catch(error => res.status(500).send(error.message)) 
   }
 
   create(req,res,app){
@@ -58,16 +54,16 @@ class PersonController {
 
                     Promise.all([this.Person.create(req.body),itemController.getName(req.body.items)])
                             .then(registered => {
-
-                              res.status(HttpStatus.CREATED).send(registered)
                               personItemController.create(registered[0].dataValues.id, registered[1],req.body)
+                              res.status(HttpStatus.CREATED).send(registered)
                             })
+                            .catch(error => error.message)
                            
                   }else{
                     res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
                   }
               })
-              .catch(error => error.message)
+              .catch(error => res.status(500).send(error.message)) 
   }
   
 
@@ -76,20 +72,87 @@ class PersonController {
 
     if(Object.keys(Errors).length === 0){
          return this.Person.update(req.body, { where: { id: req.params.id  } })
-                .then(result => {
-                    if(result == 0){
-                      Errors["name"] = "Not Found"
-                      return res.status(HttpStatus.NOT_FOUND).send(Errors)
+                .then(person => {
+                    if(person == 0){
+                       Errors["name"] = "Not Found"
+                       res.status(HttpStatus.NOT_FOUND).send(Errors)
+                    }else{
+                       res.status(HttpStatus.OK).send("Updated person")  
                     }
-
-                    return res.status(HttpStatus.OK).send("Updated person")  
                 })
-                .catch(error => error.message);                    
-      }else{
-        res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
-      }
+                .catch(error => res.status(500).send(error.message) )                    
+    }else{
+      res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors)
+    }
   }
   
+  reportInfection(req,res){
+    return Promise.all([this.Person.findById(req.params.id),
+                        this.Person.findById(req.body.infected)])
+                  .then(persons => {
+                        if(persons[0] != null && persons[1] != null){
+                            persons[0].dataValues.registrations++
+
+                            if(persons[0].dataValues.registrations > 2 ) persons[0].dataValues.infected = true
+
+                            this.Person.update(persons[0].dataValues,{ where: { id: req.params.id  } })
+                                        .then(result => res.status(HttpStatus.OK).send("Report succeed!"))
+                                        .catch(error => res.status(500).send(error.message) )
+                        }else{
+                          res.status(HttpStatus.NOT_FOUND).send("Error 404: Person not Found")
+                        }
+                  })
+                  .catch(error => res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(error.message) )
+  }
+
+  reportInfectedPeople(req,res){   
+    return  Promise.all([this.Person.count(),
+                        this.Person.count({where:{infected:true}})])
+                   .then(statistics => res.status(HttpStatus.OK).send(this.average(statistics)))
+                   .catch(error => res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(error.message)) 
+  }
+
+  reportHealthyPeople(req,res){
+      return Promise.all([this.Person.count(),
+                          this.Person.count({where:{infected:false}})])
+                    .then(statistics =>res.status(HttpStatus.OK).send(this.average(statistics)))
+                    .catch(error => res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(error.message) )
+  }
+
+  reportAveragePeopleInventory(req,res,app){
+    const personItemController = new PersonItemController(app.datasource.models.person_itens)
+
+    return Promise.all([personItemController.sum('quantity'),
+                        this.Person.count({where:{infected:false}}),
+                        this.Person.count({where:{infected:true}})])
+                  .then(statistics => res.status(HttpStatus.OK).send(this.averageAll(statistics)))
+                  .catch(error => res.status(500).send(error.message) ) 
+  }
+
+  reportPointsLosted(req,res,app){
+    const dir = path.join(__dirname, '../models/itens');
+    this.Item = this.sequelize.import(dir)
+
+    return this.Person.findAll({where:{infected:true},include:[ { model: this.Item}] })
+                .then(persons => res.status(HttpStatus.OK).send(this.calculatePointsLosted(persons)))
+                .catch(error => res.status(500).send(error.message) )
+  }
+
+  calculatePointsLosted(persons){
+    let sum = 0;
+    this.report = {};
+    for(let j = 0; j < persons.length ; j++ ){
+        for(let i = 0; i < persons[j].dataValues.items.length ; i++ ){
+            sum = persons[j].dataValues.items[i].dataValues.points + sum
+        }  
+    }
+    
+    this.report['description'] = 'Total points lost in items that belong to infected people';
+    this.report['total points'] = sum;
+
+    return this.report
+  }
+
   validation(nameOfUser,data){
       let Errors = {};
 
@@ -103,7 +166,8 @@ class PersonController {
       
       if(nameOfUser != null) {
          Errors["name"] = "already exists"
-       }
+      }
+
       return Errors;
   }
 
@@ -121,98 +185,19 @@ class PersonController {
       return Errors;
   }
 
-  reportInfection(req,res){
-    
-    return Promise.all([this.Person.findById(req.params.id),
-                        this.Person.findById(req.body.infected)])
-                  .then(persons => {
-                        if(this.existPerson(persons)){
-                          persons[0].dataValues.registrations++
-
-                          if(persons[0].dataValues.registrations > 2 ) persons[0].dataValues.infected = true
-
-                          this.Person.update(persons[0].dataValues,{ where: { id: req.params.id  } })
-                                      .then(result => res.status(HttpStatus.OK).send("Report succeed!"))
-                                      .error(error => erro.message)
-                        }else{
-                          res.status(HttpStatus.NOT_FOUND).send("Error 404: Person not Found")
-                        }
-                  })
-  }
-
-  reportInfectedPeople(req,res){
-      return Promise.all([this.Person.count(),
-                          this.Person.count({where:{infected:true}})])
-                    .then(statistics => {   
-                      res.status(HttpStatus.OK).send(this.average(statistics));
-                    })
-                    .catch(error => error.message)
-  }
-
-  reportHealthyPeople(req,res){
-      return Promise.all([this.Person.count(),
-                          this.Person.count({where:{infected:false}})])
-                    .then(statistics => {   
-                        res.status(HttpStatus.OK).send(this.average(statistics));
-                    })
-                    .catch(error => error.message)
-  }
-
-  reportAveragePeopleInventory(req,res,app){
-    const personItemController = new PersonItemController(app.datasource.models.person_itens)
-
-    return Promise.all([personItemController.sum('quantity'),
-                        this.Person.count({where:{infected:false}}),
-                        this.Person.count({where:{infected:true}})])
-                  .then(statistics => {   
-                       
-                       res.status(HttpStatus.OK).send(this.averageAll(statistics))
-                  })
-                  .catch(error => error.message)
-  }
-
-  pointsLosted(req,res,app){
-    const dir = path.join(__dirname, '../models/itens');
-    this.Item = this.sequelize.import(dir)
-
-    return this.Person.findAll({where:{infected:true},
-                             include:[ { model: this.Item}] })
-              .then(persons => {
-                let sum = 0;
-                for(let j = 0; j < persons.length ; j++ ){
-                    for(let i = 0; i < persons[j].dataValues.items.length ; i++ ){
-                        sum = persons[j].dataValues.items[i].dataValues.points + sum
-                    }  
-                }
-                
-                this.report['description'] = 'Total points lost in items that belong to infected people';
-                this.report['total points'] = sum;
-
-                res.status(HttpStatus.OK).send(this.report)
-              })
-              .catch(error => res.send(error.message)); 
-  }
-
-  existPerson(persons){
-    if(persons[0] != null && persons[1] != null)  {
-      return true;
-    }
-    return false;
-  }
-
   average(statistics){
-     let average = {};
-     average['average'] = statistics[1]/statistics[0];
+     this.report = {};
+     this.report['average'] = statistics[1]/statistics[0];
 
-     return average
+     return this.report
   }
 
   averageAll(statistics){
-    let averageAll = {};
-    averageAll['average items quantity of person'] = statistics[0] / statistics[2];
-    averageAll['average items quantity of healthy person'] = statistics[0] / statistics[1];
+    this.report = {};
+    this.report['average items quantity of person'] = statistics[0] / statistics[2];
+    this.report['average items quantity of healthy person'] = statistics[0] / statistics[1];
 
-    return averageAll;
+    return this.report;
   }
 }
 
