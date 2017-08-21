@@ -7,7 +7,7 @@ export default(sequelize, DataType) => {
     },
     name: {
       type: DataType.STRING,
-      allowNull: false
+      allowNull: false,
     },
     age: {
       type: DataType.INTEGER,
@@ -23,19 +23,19 @@ export default(sequelize, DataType) => {
         notEmpty: true,
       },
     },
-    lonlat:{
+    lonlat: {
       type: DataType.STRING,
-      allowNull: true
+      allowNull: true,
     },
-    infected:{
+    infected: {
       type: DataType.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
-    registrations:{
+    registrations: {
       type: DataType.INTEGER,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 0,
     },
   });
 

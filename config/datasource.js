@@ -9,7 +9,7 @@ const loadModels = (sequelize) => {
   const models = [];
   fs.readdirSync(dir).forEach((file) => {
     const modelDir = path.join(dir, file);
-    
+
     const model = sequelize.import(modelDir);
     models[model.name] = model;
   });
@@ -21,11 +21,11 @@ export default (app) => {
   if (!database) {
     const config = app.config;
     const sequelize = new Sequelize(
-            config.database,
-            config.username,
-            config.password,
-            config.params,
-            );
+      config.database,
+      config.username,
+      config.password,
+      config.params,
+    );
     database = {
       sequelize,
       Sequelize,
@@ -33,16 +33,11 @@ export default (app) => {
     };
 
     database.models = loadModels(sequelize);
-    
-    //database.models.persons.hasMany(database.models.person_itens)
-    //database.models.items.hasMany(database.models.person_itens)
 
-    database.models.persons.belongsToMany(database.models.items, { through: database.models.person_itens })
-    database.models.items.belongsToMany(database.models.persons, { through: database.models.person_itens })
-    
-    //database.models.person_itens.belongsTo(database.models.persons)
-    //database.models.person_itens.belongsTo(database.models.items)
-    
+    database.models.persons.belongsToMany(database.models.items,
+      { through: database.models.person_itens });
+    database.models.items.belongsToMany(database.models.persons,
+      { through: database.models.person_itens });
 
     sequelize.sync().done(() => database);
   }

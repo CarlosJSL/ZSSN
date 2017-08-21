@@ -7,11 +7,11 @@ export default(sequelize, DataType) => {
     },
     person_id: {
       type: DataType.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     item_id: {
       type: DataType.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     quantity: {
       type: DataType.INTEGER,

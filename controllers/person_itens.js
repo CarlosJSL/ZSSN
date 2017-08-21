@@ -1,52 +1,46 @@
-import HttpStatus from 'http-status';
-import path from 'path';
-import config from '../config/config';
 import Sequelize from 'sequelize';
+import config from '../config/config';
 
 class PersonItemController {
   constructor(PersonItem) {
     this.PersonItem = PersonItem;
     this.PersonItemWillBeRegistered = () => {};
     this.sequelize = new Sequelize(
-            config.database,
-            config.username,
-            config.password,
-            config.params,
-            );
+      config.database,
+      config.username,
+      config.password,
+      config.params,
+    );
   }
 
-  create(idOfPerson,Items,person) {
-   
-       return this.PersonItem.bulkCreate(this.ConstructTheDataObjectForTable(idOfPerson,Items,person))
-                  .then(result => result )
-                  .catch(error => res.status(500).send(error.message));
+  create(idOfPerson, Items, person) {
+    return this.PersonItem.bulkCreate(this.ConstructTheData(idOfPerson, Items, person))
+      .then(result => result)
+      .catch(error => error.message);
   }
-  sum(field){
-      return this.PersonItem.sum(field)
-                  .then(result => result )
-                  .catch(error => res.status(500).send(error.message))  
+  sum(field) {
+    return this.PersonItem.sum(field)
+      .then(result => result)
+      .catch(error => error.message);
   }
 
-  ConstructTheDataObjectForTable(idOfPerson,Items,person){
-     let registerPersonItem = [];
+  ConstructTheData(idOfPerson, Items, person) {
+    const registerPersonItem = [];
 
-    for(let j = 0; j < person.items.length; j++){
-        for (let i = 0; i < Items.length; i++) {
-          if ( person.items[i].name === Items[j].dataValues.name){
-            
-            let personItemWillBeRegistered = new this.PersonItemWillBeRegistered();
-           
-            personItemWillBeRegistered['person_id'] = idOfPerson;
-            personItemWillBeRegistered['item_id'] = Items[j].dataValues.id;
-            personItemWillBeRegistered['quantity'] = person.items[i].quantity ;
-            registerPersonItem.push(personItemWillBeRegistered);
-          }
+    for (let j = 0; j < person.items.length; j += 1) {
+      for (let i = 0; i < Items.length; i += 1) {
+        if (person.items[i].name === Items[j].dataValues.name) {
+          const personItemWillBeRegistered = new this.PersonItemWillBeRegistered();
+
+          personItemWillBeRegistered.person_id = idOfPerson;
+          personItemWillBeRegistered.item_id = Items[j].dataValues.id;
+          personItemWillBeRegistered.quantity = person.items[i].quantity;
+          registerPersonItem.push(personItemWillBeRegistered);
         }
-        
+      }
     }
     return registerPersonItem;
   }
-
 }
 
 export default PersonItemController;

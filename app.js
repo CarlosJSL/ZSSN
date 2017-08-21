@@ -1,8 +1,9 @@
+import bodyParser from 'body-parser';
 import express from 'express';
 import config from './config/config';
 import datasource from './config/datasource';
 import personsRouter from './routes/person';
-import bodyParser from 'body-parser';
+
 
 const app = express();
 
