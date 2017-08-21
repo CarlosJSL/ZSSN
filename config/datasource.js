@@ -39,7 +39,16 @@ export default (app) => {
     database.models.items.belongsToMany(database.models.persons,
       { through: database.models.person_itens });
 
-    sequelize.sync().done(() => database);
+
+    sequelize.sync().done(() => {
+      database.models.items.create({ name: 'Water', points: 4 });
+      database.models.items.create({ name: 'Food', points: 3 });
+      database.models.items.create({ name: 'Medication', points: 2 });
+      database.models.items.create({ name: 'Ammunition', points: 1 });
+
+      return database;
+    },
+    );
   }
   return database;
 };
