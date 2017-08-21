@@ -3,7 +3,7 @@ A REST API to store information about the survivors.
 
 ## Features
 - Add survivor
-- Update survivor location (UX improvement needed)
+- Update survivor location
 - Report infected survivor
 - Reports
 
@@ -14,23 +14,19 @@ A REST API to store information about the survivors.
 ```sh
 .
 ├── config
-│	└── config.js
-│	└── datasource.js
+│		└── config.js
+│		└── datasource.js
 ├── controllers
-│   └── item.js
-│	└── person.js
-│	└── person_itens.js
+│   ├── itens.js
+│   ├── person.js 
+│   ├── person_itens.js 
 ├── models
 │   ├── itens.js
 │   ├── person.js 
 │   ├── person_itens.js 
 ├── routes
-│	└── person.js
+│		└── person.js
 ├── test
-│   ├── unit
-│ 	│	└── controllers
-│	│		└── person.js
-│   ├── integration
 ├── .babel.rc
 ├── app.js
 └── index.js
