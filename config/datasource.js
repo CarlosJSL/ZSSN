@@ -41,6 +41,7 @@ export default (app) => {
 
 
     sequelize.sync().done(() => {
+      database.models.items.destroy({where:{}});
       database.models.items.create({ name: 'Water', points: 4 });
       database.models.items.create({ name: 'Food', points: 3 });
       database.models.items.create({ name: 'Medication', points: 2 });
