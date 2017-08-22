@@ -19,7 +19,7 @@ class PersonController {
   getAll(res) {
     return this.Person.findAll({})
       .then(persons => res.status(HttpStatus.OK).send(persons))
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
   getPersonWithItens(req, res) {
@@ -28,7 +28,7 @@ class PersonController {
 
     return this.Person.findAll({ where: { id: req.params.id }, include: [{ model: this.Item }] })
       .then(persons => res.status(HttpStatus.OK).send(persons))
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
   getById(req, res) {
@@ -39,7 +39,7 @@ class PersonController {
         }
         return res.status(HttpStatus.OK).send(person);
       })
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
   create(req, res, app) {
@@ -61,7 +61,7 @@ class PersonController {
           return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors);
         }
       })
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
 
@@ -78,7 +78,7 @@ class PersonController {
             res.status(HttpStatus.OK).send('Updated person');
           }
         })
-        .catch(error => res.status(500).send(error.message));
+        .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
     }
     return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors);
   }
@@ -93,7 +93,7 @@ class PersonController {
 
           this.Person.update(persons[0].dataValues, { where: { id: req.params.id } })
             .then(() => res.status(HttpStatus.OK).send('Report succeed!'))
-            .catch(error => res.status(500).send(error.message));
+            .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
         } else {
           res.status(HttpStatus.NOT_FOUND).send('Error 404: Person not Found');
         }
@@ -122,7 +122,7 @@ class PersonController {
       this.Person.count({ where: { infected: false } }),
       this.Person.count({ where: { infected: true } })])
       .then(statistics => res.status(HttpStatus.OK).send(this.averageAll(statistics)))
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
   reportPointsLosted(req, res) {
@@ -131,7 +131,7 @@ class PersonController {
 
     return this.Person.findAll({ where: { infected: true }, include: [{ model: this.Item }] })
       .then(persons => res.status(HttpStatus.OK).send(this.calculatePointsLosted(persons)))
-      .catch(error => res.status(500).send(error.message));
+      .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
   calculatePointsLosted(persons) {
