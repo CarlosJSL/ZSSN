@@ -73,6 +73,43 @@ describe('Routes: Person', () => {
     });
   });
 
+  describe('Route POST /api/person.json', () => {
+    const personCreate = {
+      id: 3,
+      name: 'teste create',
+      age: 15,
+      gender: 'M',
+      lonlat: '',
+      items: [{
+        name: 'Water',
+        quantity: 4,
+      }, {
+        name: 'Food',
+        quantity: 3,
+      }],
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+
+
+    it('should create a person', (done) => {
+      request
+        .post('/api/person.json')
+        .send(personCreate)
+        .end((err, res) => {
+          expect(res.body[0].name).to.eql(personCreate.name);
+          expect(res.body[0].age).to.eql(personCreate.age);
+          expect(res.body[0].gender).to.eql(personCreate.gender);
+          expect(res.body[0].location).to.eql(personCreate.location);
+          expect(res.body[1][0].name).to.eql(personCreate.items[0].name);
+          expect(res.body[1][0].quantity).to.eql(personCreate.items[0].points);
+          expect(res.body[1][1].name).to.eql(personCreate.items[1].name);
+          expect(res.body[1][1].quantity).to.eql(personCreate.items[1].points);
+          done(err);
+        });
+    });
+  });
+  
   describe('Route GET /api/person/{id}', () => {
     it('should return a person', (done) => {
       request
@@ -156,9 +193,8 @@ describe('Routes: Person', () => {
   });
 
   describe('Route GET /api/report/people/healthy_people.json', () => {
-    
     beforeEach((done) => {
-      const healthyPerson = [{
+      const infectedPerson = [{
         id: 2,
         name: 'teste healthy',
         age: 45,
@@ -170,7 +206,7 @@ describe('Routes: Person', () => {
         updated_at: '2017-08-20T02:14:48.909Z',
       }];
       Person
-        .bulkCreate(healthyPerson)
+        .bulkCreate(infectedPerson)
         .then(() => done());
     });
 

@@ -57,8 +57,9 @@ class PersonController {
               return res.status(HttpStatus.CREATED).send(registered);
             })
             .catch(error => error.message);
+        } else {
+          return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors);
         }
-        return res.status(HttpStatus.UNPROCESSABLE_ENTITY).send(Errors);
       })
       .catch(error => res.status(500).send(error.message));
   }
