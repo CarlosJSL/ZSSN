@@ -17,13 +17,13 @@ export default (app) => {
   app.route('/api/person/:id/report')
     .post((req, res) => personController.reportInfection(req, res));
 
-  app.route('/api/report/people/infected')
+  app.route('/api/report/person/infected')
     .get((req, res) => personController.reportInfectedPeople(req, res));
 
-  app.route('/api/report/people/healthy_people')
+  app.route('/api/report/person/healthy_people')
     .get((req, res) => personController.reportHealthyPeople(req, res));
 
-  app.route('/api/report/average_people_inventory')
+  app.route('/api/report/average_person_inventory')
     .get((req, res) => personController.reportAveragePeopleInventory(req, res, app));
 
   app.route('/api/report/infected_points')

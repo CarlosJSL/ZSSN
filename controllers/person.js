@@ -27,7 +27,12 @@ class PersonController {
     this.Item = this.sequelize.import(dir);
 
     return this.Person.findAll({ where: { id: req.params.id }, include: [{ model: this.Item }] })
-      .then(persons => res.status(HttpStatus.OK).send(persons))
+      .then(person => {
+        if (person.length === 0) {
+          return res.status(HttpStatus.NOT_FOUND).send('Error 404: Not Found');
+        }
+        return res.status(HttpStatus.OK).send(person);
+      })
       .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
