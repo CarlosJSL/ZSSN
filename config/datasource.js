@@ -42,11 +42,13 @@ export default (app) => {
 
     sequelize.sync().done(() => {
       database.models.items.destroy({ where: {} });
-      database.models.items.create({ id:1,name: 'Water', points: 4 });
-      database.models.items.create({ id:2,name: 'Food', points: 3 });
-      database.models.items.create({ id:3,name: 'Medication', points: 2 });
-      database.models.items.create({ id:4,name: 'Ammunition', points: 1 });
+      database.models.items.create({ id: 1, name: 'Water', points: 4 });
+      database.models.items.create({ id: 2, name: 'Food', points: 3 });
+      database.models.items.create({ id: 3, name: 'Medication', points: 2 });
+      database.models.items.create({ id: 4, name: 'Ammunition', points: 1 });
 
+      database.models.persons.destroy({ where: {} });
+      database.models.person_itens.destroy({ where: {} });
       return database;
     },
     );

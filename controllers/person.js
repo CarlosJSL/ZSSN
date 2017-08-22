@@ -144,7 +144,7 @@ class PersonController {
     }
 
     this.report.description = 'Total points lost in items that belong to infected people';
-    this.report['total points'] = sum;
+    this.report.totalPoints = sum;
 
     return this.report;
   }

@@ -5,10 +5,10 @@ export default (app) => {
   const personController = new PersonController(app.datasource.models.persons);
   app.route('/api/person.json')
     .get((req, res) => personController.getAll(res))// do
-    .post((req, res) => personController.create(req, res, app));
+    .post((req, res) => personController.create(req, res, app));// do
 
   app.route('/api/:id/person.json')
-    .get((req, res) => personController.getPersonWithItens(req, res));// later
+    .get((req, res) => personController.getPersonWithItens(req, res));// do
 
   app.route('/api/person/:id')
     .get((req, res) => personController.getById(req, res))// do

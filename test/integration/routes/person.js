@@ -49,14 +49,11 @@ describe('Routes: Person', () => {
   beforeEach((done) => {
     Person
       .destroy({ where: {} })
-      .then(() => Person.create(defaultPerson,
-      ))
-      .then(() => {
-        Item
-          .destroy({ where: {} })
-          .then(() => Item.bulkCreate(Items))
-          .then(() => done());
-      });
+      .then(() => Person.create(defaultPerson))
+      .then(() => Item.destroy({ where: {} }))
+      .then(() => Item.bulkCreate(Items))
+      .then(() => PersonItem.destroy({ where: {} }))
+      .then(() => done());
   });
 
   describe('Route GET /api/person', () => {
@@ -269,6 +266,45 @@ describe('Routes: Person', () => {
         .get('/api/report/people/healthy_people.json')
         .end((err, res) => {
           expect(res.body.average).to.eql(0.5);
+          done(err);
+        });
+    });
+  });
+
+  describe('Route GET /api/report/infected_points.json', () => {
+    const person = {
+      id: 12,
+      name: 'teste',
+      age: 23,
+      gender: 'M',
+      lonlat: '',
+      infected: true,
+      registrations: 3,
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+
+    const associativeTable = {
+      person_id: 12,
+      item_id: 1,
+      quantity: 5,
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+
+    beforeEach((done) => {
+      Person
+        .create(person)
+        .then(() => PersonItem.create(associativeTable))
+        .then(() => done());
+    });
+
+    it('should return a average of points losted', (done) => {
+      request
+        .get('/api/report/infected_points.json')
+        .end((err, res) => {
+          expect(res.body.description).to.eql('Total points lost in items that belong to infected people');
+          expect(res.body.totalPoints).to.eql(4);
           done(err);
         });
     });
