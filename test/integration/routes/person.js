@@ -309,4 +309,43 @@ describe('Routes: Person', () => {
         });
     });
   });
+
+  describe('Route GET /api/report/average_people_inventory', () => {
+    const person = {
+      id: 12,
+      name: 'teste',
+      age: 23,
+      gender: 'M',
+      lonlat: '',
+      infected: true,
+      registrations: 3,
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+
+    const associativeTable = {
+      person_id: 12,
+      item_id: 1,
+      quantity: 5,
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+
+    beforeEach((done) => {
+      Person
+        .create(person)
+        .then(() => PersonItem.create(associativeTable))
+        .then(() => done());
+    });
+
+    it('should return a average of items per person', (done) => {
+      request
+        .get('/api/report/average_people_inventory.json')
+        .end((err, res) => {
+          expect(res.body['average items quantity of person']).to.eql(5)
+          expect(res.body['average items quantity of healthy person']).to.eql(5)
+          done(err);
+        });
+    });
+  });
 });
