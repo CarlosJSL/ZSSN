@@ -129,7 +129,7 @@ describe('Routes: Person', () => {
 
   describe('Route GET /api/report/people/infected.json', () => {
     beforeEach((done) => {
-      const personInfected = [{
+      const infectedPerson = [{
         id: 2,
         name: 'teste infected',
         age: 45,
@@ -141,14 +141,42 @@ describe('Routes: Person', () => {
         updated_at: '2017-08-20T02:14:48.909Z',
       }];
       Person
-        .bulkCreate(personInfected)
+        .bulkCreate(infectedPerson)
         .then(() => done());
     });
-
 
     it('should return a average of infected persons', (done) => {
       request
         .get('/api/report/people/infected.json')
+        .end((err, res) => {
+          expect(res.body.average).to.eql(0.5);
+          done(err);
+        });
+    });
+  });
+
+  describe('Route GET /api/report/people/healthy_people.json', () => {
+    
+    beforeEach((done) => {
+      const healthyPerson = [{
+        id: 2,
+        name: 'teste healthy',
+        age: 45,
+        gender: 'M',
+        lonlat: '',
+        infected: true,
+        registrations: 3,
+        created_at: '2017-08-20T02:14:48.909Z',
+        updated_at: '2017-08-20T02:14:48.909Z',
+      }];
+      Person
+        .bulkCreate(healthyPerson)
+        .then(() => done());
+    });
+
+    it('should return a average of healthy persons', (done) => {
+      request
+        .get('/api/report/people/healthy_people.json')
         .end((err, res) => {
           expect(res.body.average).to.eql(0.5);
           done(err);
