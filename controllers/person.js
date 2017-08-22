@@ -151,7 +151,7 @@ class PersonController {
 
   validation(nameOfUser, data) {
     this.Errors = {};
-
+    
     if (isNaN(data.age)) {
       this.Errors.age = 'is not a number';
     }
