@@ -3,6 +3,7 @@ import HttpStatus from 'http-status';
 describe('Routes: Person', () => {
   const Person = app.datasource.models.persons;
   const Item = app.datasource.models.items;
+  const PersonItem = app.datasource.models.person_itens;
 
   const defaultPerson = {
     id: 1,
@@ -15,7 +16,6 @@ describe('Routes: Person', () => {
     created_at: '2017-08-20T02:14:48.909Z',
     updated_at: '2017-08-20T02:14:48.909Z',
   };
-
 
   const Items = [{
     id: 1,
@@ -109,7 +109,61 @@ describe('Routes: Person', () => {
         });
     });
   });
-  
+
+  describe('Route GET /api/:id/person.json', () => {
+    const person = {
+      id: 11,
+      name: 'teste',
+      age: 23,
+      gender: 'M',
+      lonlat: '',
+      infected: false,
+      registrations: 0,
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+
+    const associativeTable = {
+      person_id: 11,
+      item_id: 1,
+      quantity: 5,
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+    const items = { id: 1,
+      name: 'Water',
+      points: 4,
+      created_at: '2017-08-20T02:14:48.909Z',
+      updated_at: '2017-08-20T02:14:48.909Z',
+    };
+    beforeEach((done) => {
+      Person
+        .create(person)
+        .then(() => {
+          PersonItem.create(associativeTable)
+            .then(() => done());
+        });
+    });
+
+    it('should return a person with our items', (done) => {
+      request
+        .get('/api/11/person.json')
+        .end((err, res) => {
+          person.items = [items];
+
+          expect(res.body[0].id).to.eql(person.id);
+          expect(res.body[0].name).to.eql(person.name);
+          expect(res.body[0].age).to.eql(person.age);
+          expect(res.body[0].gender).to.eql(person.gender);
+          expect(res.body[0].location).to.eql(person.location);
+          expect(res.body[0].items[0].name).to.eql(person.items[0].name);
+          expect(res.body[0].items[0].points).to.eql(person.items[0].points);
+
+          done(err);
+        });
+    });
+  });
+
   describe('Route GET /api/person/{id}', () => {
     it('should return a person', (done) => {
       request
