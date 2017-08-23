@@ -47,8 +47,8 @@ export default (app) => {
       database.models.items.create({ id: 3, name: 'Medication', points: 2 });
       database.models.items.create({ id: 4, name: 'Ammunition', points: 1 });
 
-      database.models.persons.destroy({ where: {} });
-      database.models.person_itens.destroy({ where: {} });
+      // database.models.persons.destroy({ where: {} });
+      // database.models.person_itens.destroy({ where: {} });
       return database;
     },
     );

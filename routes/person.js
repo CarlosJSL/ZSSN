@@ -28,4 +28,7 @@ export default (app) => {
 
   app.route('/api/report/infected_points')
     .get((req, res) => personController.reportPointsLosted(req, res));
+
+  app.route('/api/person/:id/properties/trade')
+    .post((req, res) => personController.trade(req, res));
 };

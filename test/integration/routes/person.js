@@ -65,7 +65,7 @@ describe('Routes: Person', () => {
           expect(res.body[0].age).to.eql(defaultPerson.age);
           expect(res.body[0].gender).to.eql(defaultPerson.gender);
           expect(res.body[0].location).to.eql(defaultPerson.location);
-          expect(res.status).to.eql(HttpStatus.OK)
+          expect(res.status).to.eql(HttpStatus.OK);
           done(err);
         });
     });
@@ -103,7 +103,7 @@ describe('Routes: Person', () => {
           expect(res.body[1][0].quantity).to.eql(personCreate.items[0].points);
           expect(res.body[1][1].name).to.eql(personCreate.items[1].name);
           expect(res.body[1][1].quantity).to.eql(personCreate.items[1].points);
-          expect(res.status).to.eql(HttpStatus.CREATED)
+          expect(res.status).to.eql(HttpStatus.CREATED);
           done(err);
         });
     });
@@ -240,7 +240,7 @@ describe('Routes: Person', () => {
         .get('/api/report/people/infected')
         .end((err, res) => {
           expect(res.body.average).to.eql(0.5);
-          expect(res.status).to.eql(HttpStatus.OK)
+          expect(res.status).to.eql(HttpStatus.OK);
           done(err);
         });
     });
@@ -269,7 +269,7 @@ describe('Routes: Person', () => {
         .get('/api/report/people/healthy_people')
         .end((err, res) => {
           expect(res.body.average).to.eql(0.5);
-          expect(res.status).to.eql(HttpStatus.OK)
+          expect(res.status).to.eql(HttpStatus.OK);
           done(err);
         });
     });
@@ -309,7 +309,7 @@ describe('Routes: Person', () => {
         .end((err, res) => {
           expect(res.body.description).to.eql('Total points lost in items that belong to infected people');
           expect(res.body.totalPoints).to.eql(4);
-          expect(res.status).to.eql(HttpStatus.OK)
+          expect(res.status).to.eql(HttpStatus.OK);
           done(err);
         });
     });
@@ -347,9 +347,9 @@ describe('Routes: Person', () => {
       request
         .get('/api/report/average_people_inventory')
         .end((err, res) => {
-          expect(res.body['average items quantity of person']).to.eql(5)
-          expect(res.body['average items quantity of healthy person']).to.eql(5)
-          expect(res.status).to.eql(HttpStatus.OK)
+          expect(res.body['average items quantity of person']).to.eql(5);
+          expect(res.body['average items quantity of healthy person']).to.eql(5);
+          expect(res.status).to.eql(HttpStatus.OK);
           done(err);
         });
     });

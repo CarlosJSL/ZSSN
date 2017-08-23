@@ -27,7 +27,7 @@ class PersonController {
     this.Item = this.sequelize.import(dir);
 
     return this.Person.findAll({ where: { id: req.params.id }, include: [{ model: this.Item }] })
-      .then(person => {
+      .then((person) => {
         if (person.length === 0) {
           return res.status(HttpStatus.NOT_FOUND).send('Error 404: Not Found');
         }
@@ -139,6 +139,358 @@ class PersonController {
       .catch(error => res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message));
   }
 
+  trade(req, res) {
+    const dirItem = path.join(__dirname, '../models/itens');
+    this.Item = this.sequelize.import(dirItem);
+    const dirPersonItem = path.join(__dirname, '../models/person_itens');
+    this.PersonItem = this.sequelize.import(dirPersonItem);
+
+    return Promise.all([this.Person.findOne({ where: { id: req.params.id },
+      include: [{ model: this.Item }] }),
+    this.Person.findOne({ where: { name: req.body.personName },
+      include: [{ model: this.Item }] }),
+    ])
+      .then((persons) => {
+        const Errors = [];
+        Errors.push(this.personsExistAndAreNotInfected(persons));
+        Errors.push(this.personsHaveItems(req.body, persons));
+        Errors.push(this.itemsHaveSamePoints(req.body));
+
+        const newItemsConsumer = this.receivesNewItems(req.body, persons[0]);
+        const newItemsSurvivor = this.receivesNewItemsSurvivor(req.body, persons[1]);
+
+        const lostItemsConsumer = this.lostItemsConsumer(req.body, persons[0]);
+        const lostItemsSurvivor = this.lostItemSurvivor(req.body, persons[1]);
+
+        console.log(newItemsConsumer)
+        console.log(newItemsSurvivor)
+        console.log(lostItemsConsumer)
+        console.log(lostItemsSurvivor)
+
+      })
+      .catch(error => error.messsage);
+  }
+
+
+  lostItemSurvivor(transaction, person) {
+    const NewItem = () => {};
+    const newItems = [];
+    for (let i = 0; i < transaction.itemsWanted.length; i += 1) {
+      if (transaction.itemsWanted[i].name === 'Water') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+
+        item.person_id = person.dataValues.id;
+        item.item_id = 1;
+        item.quantity = transaction.itemsWanted[i].quantity - data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsWanted[i].name === 'Food') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 2;
+        item.quantity = transaction.itemsWanted[i].quantity - data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsWanted[i].name === 'Medication') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 3;
+        item.quantity = transaction.itemsWanted[i].quantity - data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsWanted[i].name === 'Ammunition') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 4;
+        item.quantity = transaction.itemsWanted[i].quantity - data.quantity;
+        newItems.push(item);
+      }
+    }
+    return newItems;
+  }
+
+  lostItemsConsumer(transaction, person) {
+    const NewItem = () => {};
+    const newItems = [];
+    for (let i = 0; i < transaction.itemsToPay.length; i += 1) {
+      if (transaction.itemsToPay[i].name === 'Water') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 1;
+        item.quantity = transaction.itemsToPay[i].quantity - data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsToPay[i].name === 'Food') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 2;
+        item.quantity = transaction.itemsToPay[i].quantity - data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsToPay[i].name === 'Medication') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+
+        item.person_id = person.dataValues.id;
+        item.item_id = 3;
+        item.quantity = transaction.itemsToPay[i].quantity - data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsToPay[i].name === 'Ammunition') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person, i);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 4;
+        item.quantity = transaction.itemsWanted[i].quantity - data.quantity;
+        newItems.push(item);
+      }
+    }
+    return newItems;
+  }
+
+
+  getQuantityOfItemsAndId(transaction, person, actualPosition = 0) {
+    const data = {};
+
+    for (let j = actualPosition; j < transaction.itemsToPay.length; j += 1) {
+      for (let k = 0; k < person.items.length; k += 1) {
+        if (transaction.itemsToPay[j].name === person.items[k].dataValues.name) {
+          data.id = person.items[k].person_itens.dataValues.id;
+          data.quantity = person.items[k].person_itens.dataValues.quantity;
+          return data;
+        }
+      }
+    }
+    data.id = null;
+    data.quantity = 0;
+    return data;
+  }
+
+  getQuantityOfItemsAndIdSurvivor(transaction, person, actualPosition = 0) {
+    const data = {};
+    for (let j = actualPosition; j < transaction.itemsWanted.length; j += 1) {
+      for (let k = 0; k < person.items.length; k += 1) {
+        if (transaction.itemsWanted[j].name === person.items[k].dataValues.name) {
+          data.id = person.items[k].person_itens.dataValues.id;
+          data.quantity = person.items[k].person_itens.dataValues.quantity;
+          return data;
+        }
+      }
+    }
+    data.id = null;
+    data.quantity = 0;
+    return data;
+  }
+
+  receivesNewItemsSurvivor(transaction, person) {
+    const NewItem = () => {};
+    const newItems = [];
+    for (let i = 0; i < transaction.itemsToPay.length; i += 1) {
+      if (transaction.itemsToPay[i].name === 'Water') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 1;
+        item.quantity = transaction.itemsToPay[i].quantity + data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsToPay[i].name === 'Food') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 2;
+        item.quantity = transaction.itemsToPay[i].quantity + data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsToPay[i].name === 'Medication') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 3;
+        item.quantity = transaction.itemsToPay[i].quantity + data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsToPay[i].name === 'Ammunition') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndId(transaction, person);
+
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 4;
+        item.quantity = transaction.itemsToPay[i].quantity + data.quantity;
+
+        newItems.push(item);
+      }
+    }
+    return newItems;
+  }
+
+  receivesNewItems(transaction, person) {
+    const NewItem = () => {};
+    const newItems = [];
+    for (let i = 0; i < transaction.itemsWanted.length; i += 1) {
+      if (transaction.itemsWanted[i].name === 'Water') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 1;
+        item.quantity = transaction.itemsWanted[i].quantity + data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsWanted[i].name === 'Food') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 2;
+        item.quantity = transaction.itemsWanted[i].quantity + data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsWanted[i].name === 'Medication') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person);
+        if (data.id != null) {
+          item.id = data.id;
+        }
+        item.person_id = person.dataValues.id;
+        item.item_id = 3;
+        item.quantity = transaction.itemsWanted[i].quantity + data.quantity;
+        newItems.push(item);
+      } else if (transaction.itemsWanted[i].name === 'Ammunition') {
+        const item = new NewItem();
+        const data = this.getQuantityOfItemsAndIdSurvivor(transaction, person);
+
+        if (data.id != null) {
+          item.id = data.id;
+        }
+
+        item.person_id = person.dataValues.id;
+        item.item_id = 4;
+        item.quantity = transaction.itemsWanted[i].quantity + data.quantity;
+        newItems.push(item);
+      }
+    }
+    return newItems;
+  }
+
+  itemsHaveSamePoints(transaction) {
+    let sumPointsItemsWanted = 0;
+    let sumPointsItemsToPay = 0;
+    this.Errors = {};
+    const store = [{
+      name: 'Water',
+      points: 4,
+    }, {
+      name: 'Food',
+      points: 3,
+    }, {
+      name: 'Medication',
+      points: 2,
+    }, {
+      name: 'Ammunition',
+      points: 1,
+    }];
+
+
+    for (let i = 0; i < transaction.itemsWanted.length; i += 1) {
+      if (transaction.itemsWanted[i].name === store[0].name) {
+        sumPointsItemsWanted = (store[0].points * transaction.itemsWanted[i].quantity) + sumPointsItemsWanted;
+      }
+    }
+
+    for (let i = 0; i < transaction.itemsToPay.length; i += 1) {
+      sumPointsItemsToPay = (store[0].points * transaction.itemsToPay[i].quantity) + sumPointsItemsToPay;
+    }
+
+    if (sumPointsItemsWanted >= sumPointsItemsToPay) {
+      return this.Errors;
+    }
+    this.Errors.points = 'Not have points enough';
+    return this.Errors;
+  }
+
+  personsHaveItems(transaction, persons) {
+    const other = persons[1];
+    const consumer = persons[0];
+    let itemExistes = false;
+    this.Errors = {};
+
+    for (let i = 0; i < transaction.itemsToPay.length; i += 1) {
+      for (let j = 0; j < consumer.dataValues.items.length; j += 1) {
+        if (transaction.itemsToPay[i].name === consumer.dataValues.items[j].name) {
+          itemExistes = true;
+        }
+      }
+      if (itemExistes === false) {
+        this.Errors.items = 'consumer no have this items';
+        return this.Errors;
+      }
+    }
+
+    for (let i = 0; i < transaction.itemsWanted.length; i += 1) {
+      for (let j = 0; j < consumer.dataValues.items.length; j += 1) {
+        if (transaction.itemsWanted[i].name === other.dataValues.items[j].name) {
+          itemExistes = true;
+        }
+      }
+      if (itemExistes === false) {
+        this.Errors.items = 'The other person no have this items';
+        return this.Errors;
+      }
+    }
+
+    return this.Errors;
+  }
+
+  personsExistAndAreNotInfected(persons) {
+    this.Errors = {};
+    if (persons[0] === null || persons[1] === null) {
+      this.Errors.user = 'User not found';
+    }
+
+    if (persons[0].dataValues.infected === true || persons[1].dataValues.infected === true) {
+      this.Errors.infected = 'User has infected';
+    }
+
+
+    return this.Errors;
+  }
+
   calculatePointsLosted(persons) {
     let sum = 0;
     this.report = {};
@@ -156,7 +508,7 @@ class PersonController {
 
   validation(nameOfUser, data) {
     this.Errors = {};
-    
+
     if (isNaN(data.age)) {
       this.Errors.age = 'is not a number';
     }
