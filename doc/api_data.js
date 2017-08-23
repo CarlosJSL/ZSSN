@@ -1,0 +1,400 @@
+define({ "api": [
+  {
+    "type": "get",
+    "url": "/api/person",
+    "title": "An array of all persons in the game",
+    "name": "GetPerson",
+    "group": "Person",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\nArray of items",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Person"
+  },
+  {
+    "type": "get",
+    "url": "/api/person/{id}",
+    "title": "Fetch a single person",
+    "name": "GetPersonById",
+    "group": "Person",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\": \"1244.12,214.124\",\n  \"registrations\": 2, \n  \"infected\": false,\t \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Person"
+  },
+  {
+    "type": "get",
+    "url": "/api/{id}/person",
+    "title": "Fetch a single person with our items",
+    "name": "GetPersonWithOurItems",
+    "group": "Person",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\": \"1244.12,214.124\",\n  \"registrations\": 5, \n  \"infected\": false,\n  \"items\": [{name:\"Water\",quantity: 5}]   \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Person",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PersonErrorNotFound",
+            "description": "<p>The Person not exists.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not exists\"\n}]",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "url": "/api/person",
+    "title": "Create a new person in the game",
+    "name": "postPerson",
+    "group": "Person",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Name of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "age",
+            "description": "<p>Age of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "gender",
+            "description": "<p>Gender of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location",
+            "description": "<p>The location of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Object[]",
+            "optional": true,
+            "field": "items",
+            "description": "<p>Array containing items.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Body expected",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\" : \"1244.12,214.124\",\n  \"items\": [{\"name\":\"Water\",\"quantity\": 5}]   \n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 201\t  Created\n    {\n      \"name\": \"John\",\n      \"age\": \"Doe\",\n      \"gender\": \"M\",\n      \"location\" : \"1244.12,214.124\",\n      \"items\": [{\n\t\t\tname:\"Water\",\n         quantity: 5\n\t\t }]   \n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Person",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PersonError",
+            "description": "<p>Someone field in the body is not correct.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 422 Unprocessable Entity\n[{\n  \"error\": \"Errors\"\n}]",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "url": "/api/person/{id}/report",
+    "title": "Register if someone suspects someone else is infected",
+    "name": "reportInfection",
+    "group": "Person",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "infected",
+            "description": "<p>Person id making the registration.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Person id with the infection suspect</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Body Expected:",
+          "content": "{\n  \"infected\": 123   \n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Person",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PersonError",
+            "description": "<p>Someone field in the body is not correct.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PersonErrorNotFound",
+            "description": "<p>The Person not exists.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 422 Unprocessable Entity\n[{\n  \"error\": \"Errors\"\n}]",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not exists\"\n}]",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "patch",
+    "url": "/api/person/{id}",
+    "title": "Update a person in the game",
+    "name": "updatePerson",
+    "group": "Person",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Name of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "age",
+            "description": "<p>Age of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "gender",
+            "description": "<p>Gender of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "location",
+            "description": "<p>The location of the person.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Body expected",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\" : \"1244.12,214.124\",\n}",
+          "type": "json"
+        },
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Person",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PersonErrorNotFound",
+            "description": "<p>The Person not exists.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "PersonError",
+            "description": "<p>Someone field in the body is not correct.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not exists\"\n}]",
+          "type": "json"
+        },
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 422 Unprocessable Entity\n[{\n  \"error\": \"Errors\"\n}]",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
+    "url": "/api/report/person/healthy_people",
+    "title": "Average of healthy people",
+    "name": "GetPersonsHealthy",
+    "group": "Report",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n\t\t\t\"description\" : \"Average of healthy people\",\n\t\t\t\"average\":0.5\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Report"
+  },
+  {
+    "type": "get",
+    "url": "/api/report/person/infected",
+    "title": "Average of infected people",
+    "name": "GetPersonsInfected",
+    "group": "Report",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n\t\t\t\"description\" : \"Average of infected people\",\n\t\t\t\"average\":0.5\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Report"
+  },
+  {
+    "type": "get",
+    "url": "/api/report/average_person_inventory",
+    "title": "Average of items by persons",
+    "name": "GetPersonsInventory",
+    "group": "Report",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n\t\t\t\"description\" : \"Average of items by persons\",\n\t\t\t\"average\":0.5\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Report"
+  },
+  {
+    "type": "get",
+    "url": "/api/report/infected_points",
+    "title": "Total points lost in items that belong to infected people",
+    "name": "GetPoinstLost",
+    "group": "Report",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n\t\t\t\"description\" : \"Total points lost\",\n\t\t\t\"points\": 10\n    }",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "myapp/apidoc.js",
+    "groupTitle": "Report"
+  }
+] });
