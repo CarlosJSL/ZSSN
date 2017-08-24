@@ -46,7 +46,8 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "location": "1244.12,214.124",
+ *       "lo" : 0,
+ *       "lat" : 0,
  *       "registrations": 2, 
  *       "infected": false	 
  *     }
@@ -65,7 +66,8 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "location": "1244.12,214.124",
+ *       "lo" : 0,
+ *       "lat" : 0,
  *       "registrations": 5, 
  *       "infected": false,
  *       "items": [{name:"Water",quantity: 5}]   
@@ -142,7 +144,8 @@
  * @apiParam {String} [name] 	  Name of the person.
  * @apiParam {String} [age]       Age of the person.
  * @apiParam {String} [gender]    Gender of the person.
- * @apiParam {String} [location]  The location of the person.
+ * @apiParam {Number} [lon]       The longitude of the person.
+ * @apiParam {Number} [lat]  	  The latitude of the person.
  * @apiParam {Object[]} [items]   Array containing items.
  *
  *
@@ -152,7 +155,8 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "location" : "1244.12,214.124",
+ *       "lon" : 124412,
+ *       "lat" : 124412,
  *       "items": [{"name":"Water","quantity": 5}]   
  *     }
  *
@@ -162,7 +166,8 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "location" : "1244.12,214.124",
+ *       "lon" : 124412,
+ *       "lat" : 124412,
  *       "items": [{
  *			name:"Water",
  *          quantity: 5
@@ -186,7 +191,7 @@
  *     }
  *
  * @apiSuccessExample Success-Response:
- *     HTTP/1.1 201 Created
+ *     HTTP/1.1 200 Ok
  *
  * @apiUse PersonError
  * @apiUse PersonErrorNotFound
@@ -201,7 +206,8 @@
  * @apiParam {String} [name] 	  Name of the person.
  * @apiParam {String} [age]       Age of the person.
  * @apiParam {String} [gender]    Gender of the person.
- * @apiParam {String} [location]  The location of the person.
+ * @apiParam {Number} [lon]       The longitude of the person.
+ * @apiParam {Number} [lat]  	  The latitude of the person.
  *
  *
  * @apiSuccessExample Body expected
@@ -210,7 +216,8 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "location" : "1244.12,214.124"
+ *       "lo" : 123312,
+ *       "lat" : 123312,
  *     }
  *
  * @apiSuccessExample Success-Response:

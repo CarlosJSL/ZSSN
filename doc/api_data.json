@@ -15,7 +15,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Person"
   },
   {
@@ -28,13 +28,13 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\": \"1244.12,214.124\",\n  \"registrations\": 2, \n  \"infected\": false,\t \n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lo\" : 0,\n  \"lat\" : 0,\n  \"registrations\": 2, \n  \"infected\": false\t \n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Person"
   },
   {
@@ -47,13 +47,13 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\": \"1244.12,214.124\",\n  \"registrations\": 5, \n  \"infected\": false,\n  \"items\": [{name:\"Water\",quantity: 5}]   \n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lo\" : 0,\n  \"lat\" : 0,\n  \"registrations\": 5, \n  \"infected\": false,\n  \"items\": [{name:\"Water\",quantity: 5}]   \n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Person",
     "error": {
       "fields": {
@@ -107,10 +107,17 @@
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": true,
-            "field": "location",
-            "description": "<p>The location of the person.</p>"
+            "field": "lon",
+            "description": "<p>The longitude of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "lat",
+            "description": "<p>The latitude of the person.</p>"
           },
           {
             "group": "Parameter",
@@ -126,18 +133,18 @@
       "examples": [
         {
           "title": "Body expected",
-          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\" : \"1244.12,214.124\",\n  \"items\": [{\"name\":\"Water\",\"quantity\": 5}]   \n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lon\" : 124412,\n  \"lat\" : 124412,\n  \"items\": [{\"name\":\"Water\",\"quantity\": 5}]   \n}",
           "type": "json"
         },
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 201\t  Created\n    {\n      \"name\": \"John\",\n      \"age\": \"Doe\",\n      \"gender\": \"M\",\n      \"location\" : \"1244.12,214.124\",\n      \"items\": [{\n\t\t\tname:\"Water\",\n         quantity: 5\n\t\t }]   \n    }",
+          "content": "    HTTP/1.1 201\t  Created\n    {\n      \"name\": \"John\",\n      \"age\": \"Doe\",\n      \"gender\": \"M\",\n      \"lon\" : 124412,\n      \"lat\" : 124412,\n      \"items\": [{\n\t\t\tname:\"Water\",\n         quantity: 5\n\t\t }]   \n    }",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Person",
     "error": {
       "fields": {
@@ -194,13 +201,13 @@
         },
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created",
+          "content": "HTTP/1.1 200 Ok",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Person",
     "error": {
       "fields": {
@@ -265,10 +272,17 @@
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": true,
-            "field": "location",
-            "description": "<p>The location of the person.</p>"
+            "field": "lon",
+            "description": "<p>The longitude of the person.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "lat",
+            "description": "<p>The latitude of the person.</p>"
           }
         ]
       }
@@ -277,7 +291,7 @@
       "examples": [
         {
           "title": "Body expected",
-          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"location\" : \"1244.12,214.124\",\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lo\" : 123312,\n  \"lat\" : 123312,\n}",
           "type": "json"
         },
         {
@@ -288,7 +302,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Person",
     "error": {
       "fields": {
@@ -337,7 +351,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Report"
   },
   {
@@ -356,7 +370,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Report"
   },
   {
@@ -375,7 +389,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Report"
   },
   {
@@ -394,7 +408,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "myapp/apidoc.js",
+    "filename": "./apidoc.js",
     "groupTitle": "Report"
   }
 ]
