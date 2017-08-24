@@ -43,7 +43,26 @@ A REST API to store informations about the survivors.
 - PostgreSQL
 
 ## Api Reference
-Go to the folder /doc and access the index.html file
+Go to the folder /doc and access the index.html file for more informations
+
+### Survivor
+|      METODO      |     ENDPOINT              |        FUNCTION                                    
+|------------------|---------------------------|----------------------
+| GET              | /api/person               | List all persons
+| GET              | /api/person/:id           | List one person by id
+| GET              | /api/:id /person/         | List one person with your item
+| POST             | /api/person               | Create a new survivor
+| POST             | /api/person/:id/report    | Informs that survivor is infected
+| PATCH            | /api/person/:id           | Update a survivor
+
+### Reports
+|      METODO      |     ENDPOINT                               |        USO                                    
+|------------------|--------------------------------------------|--------
+| GET              | /api/report/person/infected                | Informs the average of infected people
+| GET              | /api/report/person/healthy_people          | Informs the average of non-infected people
+| GET              | /api/report/person/average_person_inventory| Informs the average of the quantity of items per person
+| GET              | /api/report/infected_points                | Informs the total points lost in items that belong to infected people
+
 
 ## Heroku
 You can see the API on Heroku. [Heroku Demo] (https://zssn-back-end.herokuapp.com/api/person)
