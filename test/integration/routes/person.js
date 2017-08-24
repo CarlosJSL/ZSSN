@@ -237,8 +237,9 @@ describe('Routes: Person', () => {
 
     it('should return a average of infected persons', (done) => {
       request
-        .get('/api/report/people/infected')
+        .get('/api/report/person/infected')
         .end((err, res) => {
+          
           expect(res.body.average).to.eql(0.5);
           expect(res.status).to.eql(HttpStatus.OK);
           done(err);
@@ -246,7 +247,7 @@ describe('Routes: Person', () => {
     });
   });
 
-  describe('Route GET /api/report/people/healthy_people', () => {
+  describe('Route GET /api/report/person/healthy_people', () => {
     beforeEach((done) => {
       const infectedPerson = [{
         id: 2,
@@ -266,7 +267,7 @@ describe('Routes: Person', () => {
 
     it('should return a average of healthy persons', (done) => {
       request
-        .get('/api/report/people/healthy_people')
+        .get('/api/report/person/healthy_people')
         .end((err, res) => {
           expect(res.body.average).to.eql(0.5);
           expect(res.status).to.eql(HttpStatus.OK);
@@ -345,7 +346,7 @@ describe('Routes: Person', () => {
 
     it('should return a average of items per person', (done) => {
       request
-        .get('/api/report/average_people_inventory')
+        .get('/api/report/average_person_inventory')
         .end((err, res) => {
           expect(res.body['average items quantity of person']).to.eql(5);
           expect(res.body['average items quantity of healthy person']).to.eql(5);
