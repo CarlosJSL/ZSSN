@@ -56,7 +56,7 @@ Go to  folder /doc and access the index.html file for more informations
 | PATCH            | /api/person/:id           | Update a survivor
 
 ### Reports
-|      METODO      |     ENDPOINT                               |        USO                                    
+|      METODO      |     ENDPOINT                               |        FUNCTION                                    
 |------------------|--------------------------------------------|--------
 | GET              | /api/report/person/infected                | Informs the average of infected people
 | GET              | /api/report/person/healthy_people          | Informs the average of non-infected people
