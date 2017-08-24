@@ -55,7 +55,7 @@ You can see the API on Heroku. [Heroku Demo] (https://zssn-back-end.herokuapp.co
 ## Database
 The project needs a relational database because of the relationship rules it needs. The image below shows these relationships
 <p align="center">
-  <img src="doc/database.png?raw=true" width="880"/>
+  <img src="doc/database.png?raw=true" width="780"/>
 </p>
 ## Running locally
 First of all you'll postgresql installed 
