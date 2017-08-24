@@ -2,7 +2,7 @@
   {
     "type": "get",
     "url": "/api/person",
-    "title": "An array of all persons in the game",
+    "title": "An array of all registered persons",
     "name": "GetPerson",
     "group": "Person",
     "success": {
@@ -28,7 +28,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lo\" : 0,\n  \"lat\" : 0,\n  \"registrations\": 2, \n  \"infected\": false\t \n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lon\" : 0,\n  \"lat\" : 0,\n  \"registrations\": 2, \n  \"infected\": false\t \n}",
           "type": "json"
         }
       ]
@@ -40,14 +40,14 @@
   {
     "type": "get",
     "url": "/api/{id}/person",
-    "title": "Fetch a single person with our items",
+    "title": "Fetch a single person with it's items",
     "name": "GetPersonWithOurItems",
     "group": "Person",
     "success": {
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lo\" : 0,\n  \"lat\" : 0,\n  \"registrations\": 5, \n  \"infected\": false,\n  \"items\": [{name:\"Water\",quantity: 5}]   \n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lon\" : 0,\n  \"lat\" : 0,\n  \"registrations\": 5, \n  \"infected\": true,\n  \"items\": [{name:\"Water\",quantity: 5}]   \n}",
           "type": "json"
         }
       ]
@@ -62,14 +62,14 @@
             "group": "Error 4xx",
             "optional": false,
             "field": "PersonErrorNotFound",
-            "description": "<p>The Person not exists.</p>"
+            "description": "<p>The person was not found.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not exists\"\n}]",
+          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not found\"\n}]",
           "type": "json"
         }
       ]
@@ -78,7 +78,7 @@
   {
     "type": "post",
     "url": "/api/person",
-    "title": "Create a new person in the game",
+    "title": "Create a new person",
     "name": "postPerson",
     "group": "Person",
     "parameter": {
@@ -89,42 +89,42 @@
             "type": "String",
             "optional": true,
             "field": "name",
-            "description": "<p>Name of the person.</p>"
+            "description": "<p>Person's name.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "age",
-            "description": "<p>Age of the person.</p>"
+            "description": "<p>Person's age.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "gender",
-            "description": "<p>Gender of the person.</p>"
+            "description": "<p>Person's gender.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": true,
             "field": "lon",
-            "description": "<p>The longitude of the person.</p>"
+            "description": "<p>Person localization's longitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": true,
             "field": "lat",
-            "description": "<p>The latitude of the person.</p>"
+            "description": "<p>Person localization's latitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "Object[]",
             "optional": true,
             "field": "items",
-            "description": "<p>Array containing items.</p>"
+            "description": "<p>Array containing person's items.</p>"
           }
         ]
       }
@@ -153,7 +153,7 @@
             "group": "Error 4xx",
             "optional": false,
             "field": "PersonError",
-            "description": "<p>Someone field in the body is not correct.</p>"
+            "description": "<p>Some field in the body is incorrect.</p>"
           }
         ]
       },
@@ -180,14 +180,14 @@
             "type": "Number",
             "optional": false,
             "field": "infected",
-            "description": "<p>Person id making the registration.</p>"
+            "description": "<p>Person's id making the registration.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": false,
             "field": "id",
-            "description": "<p>Person id with the infection suspect</p>"
+            "description": "<p>Person's id with the infection suspect</p>"
           }
         ]
       }
@@ -216,13 +216,13 @@
             "group": "Error 4xx",
             "optional": false,
             "field": "PersonError",
-            "description": "<p>Someone field in the body is not correct.</p>"
+            "description": "<p>Some field in the body is incorrect.</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
             "field": "PersonErrorNotFound",
-            "description": "<p>The Person not exists.</p>"
+            "description": "<p>The person was not found.</p>"
           }
         ]
       },
@@ -234,7 +234,7 @@
         },
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not exists\"\n}]",
+          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not found\"\n}]",
           "type": "json"
         }
       ]
@@ -243,7 +243,7 @@
   {
     "type": "patch",
     "url": "/api/person/{id}",
-    "title": "Update a person in the game",
+    "title": "Update a person",
     "name": "updatePerson",
     "group": "Person",
     "parameter": {
@@ -254,35 +254,35 @@
             "type": "String",
             "optional": true,
             "field": "name",
-            "description": "<p>Name of the person.</p>"
+            "description": "<p>Person's name.</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "age",
-            "description": "<p>Age of the person.</p>"
+            "description": "<p>Person's age .</p>"
           },
           {
             "group": "Parameter",
             "type": "String",
             "optional": true,
             "field": "gender",
-            "description": "<p>Gender of the person.</p>"
+            "description": "<p>Person's gender .</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": true,
             "field": "lon",
-            "description": "<p>The longitude of the person.</p>"
+            "description": "<p>Person localization's longitude.</p>"
           },
           {
             "group": "Parameter",
             "type": "Number",
             "optional": true,
             "field": "lat",
-            "description": "<p>The latitude of the person.</p>"
+            "description": "<p>Person localization's latitude</p>"
           }
         ]
       }
@@ -291,7 +291,7 @@
       "examples": [
         {
           "title": "Body expected",
-          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lo\" : 123312,\n  \"lat\" : 123312,\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"name\": \"John\",\n  \"age\": \"Doe\",\n  \"gender\": \"M\",\n  \"lon\" : 123312,\n  \"lat\" : 123312,\n}",
           "type": "json"
         },
         {
@@ -311,20 +311,20 @@
             "group": "Error 4xx",
             "optional": false,
             "field": "PersonErrorNotFound",
-            "description": "<p>The Person not exists.</p>"
+            "description": "<p>The person was not found.</p>"
           },
           {
             "group": "Error 4xx",
             "optional": false,
             "field": "PersonError",
-            "description": "<p>Someone field in the body is not correct.</p>"
+            "description": "<p>Some field in the body is incorrect.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Error-Response:",
-          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not exists\"\n}]",
+          "content": "HTTP/1.1 404 Not Found\n[{\n  \"error\": \"Person not found\"\n}]",
           "type": "json"
         },
         {

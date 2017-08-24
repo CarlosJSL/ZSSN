@@ -1,7 +1,7 @@
 /**
  * @apiDefine PersonError
  *
- * @apiError PersonError Someone field in the body is not correct.
+ * @apiError PersonError Some field in the body is incorrect.
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 422 Unprocessable Entity
@@ -12,18 +12,18 @@
 
 /**
  * @apiDefine PersonErrorNotFound
- *
- * @apiError PersonErrorNotFound The Person not exists.
+ * 
+ * @apiError PersonErrorNotFound The person was not found.
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Not Found
  *     [{
- *       "error": "Person not exists"
+ *       "error": "Person not found"
  *     }]
  */
 
 /**
- * @api {get} /api/person An array of all persons in the game
+ * @api {get} /api/person An array of all registered persons 
  * @apiName GetPerson
  * @apiGroup Person
  *
@@ -46,7 +46,7 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "lo" : 0,
+ *       "lon" : 0,
  *       "lat" : 0,
  *       "registrations": 2, 
  *       "infected": false	 
@@ -55,7 +55,7 @@
  *
  */
 /**
- * @api {get} /api/{id}/person Fetch a single person with our items
+ * @api {get} /api/{id}/person Fetch a single person with it's items
  * @apiName GetPersonWithOurItems
  * @apiGroup Person
  *
@@ -66,10 +66,10 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "lo" : 0,
+ *       "lon" : 0,
  *       "lat" : 0,
  *       "registrations": 5, 
- *       "infected": false,
+ *       "infected": true,
  *       "items": [{name:"Water",quantity: 5}]   
  *     }
  *
@@ -137,16 +137,16 @@
  *
  */
 /**
- * @api {post} /api/person Create a new person in the game
+ * @api {post} /api/person Create a new person 
  * @apiName postPerson
  * @apiGroup Person
  *
- * @apiParam {String} [name] 	  Name of the person.
- * @apiParam {String} [age]       Age of the person.
- * @apiParam {String} [gender]    Gender of the person.
- * @apiParam {Number} [lon]       The longitude of the person.
- * @apiParam {Number} [lat]  	  The latitude of the person.
- * @apiParam {Object[]} [items]   Array containing items.
+ * @apiParam {String} [name] 	  Person's name.
+ * @apiParam {String} [age]       Person's age.
+ * @apiParam {String} [gender]    Person's gender.
+ * @apiParam {Number} [lon]       Person localization's longitude.
+ * @apiParam {Number} [lat]  	  Person localization's latitude.
+ * @apiParam {Object[]} [items]   Array containing person's items.
  *
  *
  * @apiSuccessExample Body expected
@@ -182,8 +182,8 @@
  * @apiName reportInfection
  * @apiGroup Person
  *
- * @apiParam {Number} infected          Person id making the registration.	  
- * @apiParam {Number} id          		Person id with the infection suspect
+ * @apiParam {Number} infected          Person's id making the registration.	  
+ * @apiParam {Number} id          		Person's id with the infection suspect
  * 
  * @apiSuccessExample Body Expected:
  *     {
@@ -199,15 +199,15 @@
  *
  */
  /**
- * @api {patch} /api/person/{id} Update a person in the game
+ * @api {patch} /api/person/{id} Update a person 
  * @apiName updatePerson
  * @apiGroup Person
  *
- * @apiParam {String} [name] 	  Name of the person.
- * @apiParam {String} [age]       Age of the person.
- * @apiParam {String} [gender]    Gender of the person.
- * @apiParam {Number} [lon]       The longitude of the person.
- * @apiParam {Number} [lat]  	  The latitude of the person.
+ * @apiParam {String} [name] 	  Person's name.
+ * @apiParam {String} [age]       Person's age .
+ * @apiParam {String} [gender]    Person's gender .
+ * @apiParam {Number} [lon]       Person localization's longitude.
+ * @apiParam {Number} [lat]  	  Person localization's latitude
  *
  *
  * @apiSuccessExample Body expected
@@ -216,7 +216,7 @@
  *       "name": "John",
  *       "age": "Doe",
  *       "gender": "M",
- *       "lo" : 123312,
+ *       "lon" : 123312,
  *       "lat" : 123312,
  *     }
  *
