@@ -23,8 +23,13 @@ export default(sequelize, DataType) => {
         notEmpty: true,
       },
     },
-    lonlat: {
-      type: DataType.STRING,
+    lon:{
+      type: DataType.INTEGER,
+      allowNull: true,
+    },
+
+    lat: {
+      type: DataType.INTEGER,
       allowNull: true,
     },
     infected: {

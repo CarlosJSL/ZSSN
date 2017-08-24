@@ -10,7 +10,8 @@ describe('Routes: Person', () => {
     name: 'teste',
     age: 23,
     gender: 'M',
-    lonlat: '',
+    lon: 0,
+    lat: 0,
     infected: false,
     registrations: 0,
     created_at: '2017-08-20T02:14:48.909Z',
@@ -64,7 +65,8 @@ describe('Routes: Person', () => {
           expect(res.body[0].name).to.eql(defaultPerson.name);
           expect(res.body[0].age).to.eql(defaultPerson.age);
           expect(res.body[0].gender).to.eql(defaultPerson.gender);
-          expect(res.body[0].location).to.eql(defaultPerson.location);
+          expect(res.body[0].lon).to.eql(defaultPerson.lon);
+          expect(res.body[0].lat).to.eql(defaultPerson.lat);
           expect(res.status).to.eql(HttpStatus.OK);
           done(err);
         });
@@ -77,7 +79,8 @@ describe('Routes: Person', () => {
       name: 'teste create',
       age: 15,
       gender: 'M',
-      lonlat: '',
+      lon:0,
+      lat:0,
       items: [{
         name: 'Water',
         quantity: 4,
@@ -98,7 +101,8 @@ describe('Routes: Person', () => {
           expect(res.body[0].name).to.eql(personCreate.name);
           expect(res.body[0].age).to.eql(personCreate.age);
           expect(res.body[0].gender).to.eql(personCreate.gender);
-          expect(res.body[0].location).to.eql(personCreate.location);
+          expect(res.body[0].lon).to.eql(personCreate.lon);
+          expect(res.body[0].lat).to.eql(personCreate.lat);
           expect(res.body[1][0].name).to.eql(personCreate.items[0].name);
           expect(res.body[1][0].quantity).to.eql(personCreate.items[0].points);
           expect(res.body[1][1].name).to.eql(personCreate.items[1].name);
@@ -115,7 +119,8 @@ describe('Routes: Person', () => {
       name: 'teste',
       age: 23,
       gender: 'M',
-      lonlat: '',
+      lon:0,
+      lat:0,
       infected: false,
       registrations: 0,
       created_at: '2017-08-20T02:14:48.909Z',
@@ -154,7 +159,8 @@ describe('Routes: Person', () => {
           expect(res.body[0].name).to.eql(person.name);
           expect(res.body[0].age).to.eql(person.age);
           expect(res.body[0].gender).to.eql(person.gender);
-          expect(res.body[0].location).to.eql(person.location);
+          expect(res.body[0].lon).to.eql(person.lon);
+          expect(res.body[0].lat).to.eql(person.lat);
           expect(res.body[0].items[0].name).to.eql(person.items[0].name);
           expect(res.body[0].items[0].points).to.eql(person.items[0].points);
 
@@ -171,7 +177,8 @@ describe('Routes: Person', () => {
           expect(res.body.name).to.eql(defaultPerson.name);
           expect(res.body.age).to.eql(defaultPerson.age);
           expect(res.body.gender).to.eql(defaultPerson.gender);
-          expect(res.body.location).to.eql(defaultPerson.location);
+          expect(res.body.lon).to.eql(defaultPerson.lon);
+          expect(res.body.lat).to.eql(defaultPerson.lat);
           done(err);
         });
     });
@@ -184,7 +191,8 @@ describe('Routes: Person', () => {
         name: 'teste update',
         age: 45,
         gender: 'M',
-        lonlat: '',
+        lon:0,
+        lat:0,
         infected: false,
         registrations: 0,
         created_at: '2017-08-20T02:14:48.909Z',
@@ -224,7 +232,8 @@ describe('Routes: Person', () => {
         name: 'teste infected',
         age: 45,
         gender: 'M',
-        lonlat: '',
+        lon:0,
+        lat:0,
         infected: true,
         registrations: 3,
         created_at: '2017-08-20T02:14:48.909Z',
@@ -254,7 +263,8 @@ describe('Routes: Person', () => {
         name: 'teste healthy',
         age: 45,
         gender: 'M',
-        lonlat: '',
+        lon:0,
+        lat:0,
         infected: true,
         registrations: 3,
         created_at: '2017-08-20T02:14:48.909Z',
@@ -282,7 +292,8 @@ describe('Routes: Person', () => {
       name: 'teste',
       age: 23,
       gender: 'M',
-      lonlat: '',
+      lon:0,
+      lat:0,
       infected: true,
       registrations: 3,
       created_at: '2017-08-20T02:14:48.909Z',
@@ -322,7 +333,8 @@ describe('Routes: Person', () => {
       name: 'teste',
       age: 23,
       gender: 'M',
-      lonlat: '',
+      lon:0,
+      lat:0,
       infected: true,
       registrations: 3,
       created_at: '2017-08-20T02:14:48.909Z',

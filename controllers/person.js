@@ -506,10 +506,12 @@ class PersonController {
     return this.report;
   }
 
+
+
   validation(nameOfUser, data) {
     this.Errors = {};
 
-    if (isNaN(data.age)) {
+    if (typeof data.age !== "number") {
       this.Errors.age = 'is not a number';
     }
 
@@ -520,14 +522,17 @@ class PersonController {
     if (nameOfUser !== null) {
       this.Errors.name = 'already exists';
     }
-
+    
+    if ( typeof data.lon !== "number" || typeof data.lon !== "number" ){
+      this.Errors.location = 'incorrect location';
+    }
     return this.Errors;
   }
 
   validationUpdate(data) {
     this.Errors = {};
 
-    if (isNaN(data.age)) {
+    if (typeof data.age !== "number") {
       this.Errors.age = 'is not a number';
     }
 
@@ -535,6 +540,10 @@ class PersonController {
       this.Errors.gender = 'is not a gender';
     }
 
+    if ( typeof data.lon !== "number" || typeof data.lon !== "number" ){
+      this.Errors.location = 'incorrect location';
+    }
+    
     return this.Errors;
   }
 
