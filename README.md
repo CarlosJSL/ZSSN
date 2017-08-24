@@ -6,7 +6,7 @@
 A REST API to store informations about the survivors. 
 
 ## Features
-- [X] Add survivor
+- [X] Register survivor 
 - [X] Update survivor location
 - [X] All Reports
 - [X] Flag survivor as infected
@@ -43,14 +43,14 @@ A REST API to store informations about the survivors.
 - PostgreSQL
 
 ## Api Reference
-Go to the folder /doc and access the index.html file for more informations
+Go to  folder /doc and access the index.html file for more informations
 
 ### Survivor
 |      METODO      |     ENDPOINT              |        FUNCTION                                    
 |------------------|---------------------------|----------------------
 | GET              | /api/person               | List all persons
 | GET              | /api/person/:id           | List one person by id
-| GET              | /api/:id /person/         | List one person with your item
+| GET              | /api/:id /person/         | List one person with it's items
 | POST             | /api/person               | Create a new survivor
 | POST             | /api/person/:id/report    | Informs that survivor is infected
 | PATCH            | /api/person/:id           | Update a survivor
@@ -77,6 +77,8 @@ The project needs a relational database because of the relationship rules it nee
   <img src="doc/database.png?raw=true" width="780"/>
 </p>
 ## Running locally
+
+
 First of all you'll postgresql installed 
 
 ```sh
@@ -84,10 +86,15 @@ First of all you'll postgresql installed
 > sudo apt-get install postgresql
 ```
 
-Downlad NodeJs
+Download NodeJs
 ```sh
 > sudo apt-get update
 > sudo apt-get install nodejs
+```
+
+Clone the project
+```sh
+> git clone https://gitlab.com/carlosjsl95/survivorProject.git
 ```
 
 Install the project dependencies
@@ -95,7 +102,7 @@ Install the project dependencies
 > npm i
 ```
 
-Then create a database named survivor in the postgres and change the options in the file config.js for your password and user
+Then create a database named survivor on postgres and change the options in the file config.js for your password and user
 
 ```sh
 export default{
@@ -127,5 +134,5 @@ You can run tests with the following commands
 ```
 
 ## TODO
-- [ ] Implement trade's api
+- [ ] Implement trade's endpoint
 
