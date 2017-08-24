@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://s3.amazonaws.com/media-p.slid.es/uploads/304939/images/1527074/cb_16750ae96783c8b6ba983ead7118a873.png" width="900" height="300"/>
+  <img src="https://s3.amazonaws.com/media-p.slid.es/uploads/304939/images/1527074/cb_16750ae96783c8b6ba983ead7118a873.png" width="800" height="300"/>
 </p>
 
 # ZSSN (Zombie Survival Social Network) - Back-end
