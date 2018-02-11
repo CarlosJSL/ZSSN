@@ -38,7 +38,8 @@
     "express": "^4.15.4",
     "http-status": "^1.0.1",
     "pg": "^7.1.2",
-    "sequelize": "^4.5.0"
+    "sequelize": "^4.5.0",
+    "mocha": "^3.5.3"
   },
   "devDependencies": {
     "chai": "^4.1.1",
@@ -49,7 +50,6 @@
     "eslint-plugin-react": "^7.2.1",
     "joi": "^10.6.0",
     "joi-assert": "0.0.3",
-    "mocha": "^3.5.0",
     "supertest": "^3.0.0",
     "testdouble": "^3.2.4"
   }
