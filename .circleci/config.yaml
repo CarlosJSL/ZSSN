@@ -5,6 +5,6 @@ jobs:
     docker:
       - image: circleci/node: 7
     steps:
-      - checkout: 
+      - checkout 
       - run: npm install
       - run: npm run test-unit

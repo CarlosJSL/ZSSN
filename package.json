@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "REST API developed using nodejs, express and sequelize.",
   "main": "index.js",
+  "engines": {
+    "node": ">= 7.6.0"
+  },
   "scripts": {
     "start": "babel-node index.js",
     "test": "npm run test-unit",
