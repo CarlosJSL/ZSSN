@@ -1,7 +1,7 @@
 version: 2
 jobs: 
   build: 
-    wordking_directory: ~/tmp
+    working_directory: ~/tmp
     docker:
       - image: circleci/node: 7
     steps:
