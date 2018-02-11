@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node index.js",
+    "test": "npm run test-unit",
     "test-integration": "NODE_ENV=test mocha --opts test/integration/mocha.opts test/integration/**/*.js",
     "test-unit": "NODE_ENV=test mocha --opts test/unit/mocha.opts test/unit/**/*.js",
     "lint": "eslint '**/*.js'",
