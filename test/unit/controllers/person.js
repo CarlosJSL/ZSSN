@@ -36,11 +36,7 @@ describe('Controllers: Person', () => {
 
       const personController = new PersonController(Person);
 
-      return personController.getAll(res)
-        .then((response) => {
-          expect(response.statusCode).to.be.eql(200);
-          expect(response.data).to.be.eql(expectedResponse);
-        });
+      
     });
   });
 
